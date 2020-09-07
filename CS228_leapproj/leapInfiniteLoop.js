@@ -14,9 +14,15 @@ Leap.loop(controllerOptions,function (frame) {
 
     if(frame.hands.length == 1){
         var hand = frame.hands[0];
-        console.log(hand);
+        //console.log(hand);
         var fingers = hand.fingers;
-        console.log(fingers.length);
+        //console.log(fingers.length);
+        for(var i=0; i<fingers.length;++i){
+            if(fingers[i].type == 1){
+                console.log(fingers[1])
+            }
+            //console.log(fingers[i]);
+        }
     }
 
 });
