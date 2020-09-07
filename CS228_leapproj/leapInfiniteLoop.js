@@ -2,16 +2,18 @@ var controllerOptions = {}
 
 var x = window.innerWidth/2;
 var y = window.innerHeight/2;
-
+var z;
 Leap.loop(controllerOptions,function (frame) {
+    clear();
     HandleFrame(frame);
+
+
 
 });
 
 function HandleFrame(frame) {
-    /*clear();
     circle(x,y,50);
-    var randomIntX = Math.round(Math.random()) * 2 - 1;
+    /*var randomIntX = Math.round(Math.random()) * 2 - 1;
     var randomIntY = Math.round(Math.random()) * 2 - 1;
     x+= randomIntX;
     y+= randomIntY;*/
@@ -27,14 +29,19 @@ function HandleHand(hand) {
     //console.log(hand);
     var fingers = hand.fingers;
     //console.log(fingers.length);
+
     HandleFinger(fingers);
 }
 
 function HandleFinger(fingers){
     for(var i=0; i<fingers.length;++i){
         if(fingers[i].type == 1){
-            console.log(fingers[1])
+            console.log(fingers[1].tipPosition)
+
         }
         //console.log(fingers[i]);
     }
+    x = fingers[1].tipPosition[0]+300;
+    y = fingers[1].tipPosition[1]+300;
+    z = fingers[1].tipPosition[2];
 }
