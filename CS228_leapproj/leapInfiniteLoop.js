@@ -10,6 +10,10 @@ Leap.loop(controllerOptions,function (frame) {
     var randomIntY = Math.round(Math.random()) * 2 - 1;
     x+= randomIntX;
     y+= randomIntY;*/
-    console.log(frame.hands);
+
+
+    if(frame.hands.length == 1){
+        console.log(frame.hands[0]);
+    }
 
 });
