@@ -49,19 +49,21 @@ function HandleFinger(finger){
 
         //console.log(fingers[i]);
 
-    x = finger.tipPosition[0];
+    x = finger.tipPosition[0]+300;
     y = window.innerHeight-finger.tipPosition[1];
+   // y = finger.tipPosition[1]+300;
     z = finger.tipPosition[2];
 
-    scale(finger.tipPosition[0],[rawXMin,rawXMax],[0,window.innerWidth]);
-    scale(finger.tipPosition[1],[rawYMin,rawYMax],[0,window.innerHeight]);
+    circle(x,y,50);
+    convertRange(x,[rawXMin,rawXMax],[0,window.innerWidth]);
+    convertRange(y,[rawYMin,rawYMax],[0,window.innerHeight]);
 
     if(finger.tipPosition[0] < rawXMin){
         rawXMin = finger.tipPosition[0];
         console.log(x);
     }
     if(finger.tipPosition[1] < rawYMin){
-        rawYMin = y
+        rawYMin = finger.tipPosition[1];
         console.log(y);
     }
     if(finger.tipPosition[0] > rawXMax){
@@ -69,15 +71,13 @@ function HandleFinger(finger){
         console.log(x);
     }
     if(finger.tipPosition[1] > rawYMax){
-        rawYMax = y
+        rawYMax = finger.tipPosition[1];
         console.log(y);
     }
 
 
 }
 
-function scale(value, from, to) {
-    var scale = (to[1] - to[0]) / (from[1] - from[0]);
-    var capped = Math.min(from[1], Math.max(from[0], value)) - from[0];
-    return ~~(capped * scale + to[0]);
+function convertRange( value, r1, r2 ) {
+    return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
 }
