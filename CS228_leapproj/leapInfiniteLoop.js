@@ -13,7 +13,7 @@ Leap.loop(controllerOptions,function (frame) {
     HandleFrame(frame);
 
 });
-
+//testing
 function HandleFrame(frame) {
 
     circle(x,y,50);
