@@ -8,6 +8,7 @@ var rawXMin = 100000;
 var rawYMin = 100000;
 var rawXMax = -100000;
 var rawYMax = -100000;
+//testing
 Leap.loop(controllerOptions,function (frame) {
     clear();
     HandleFrame(frame);
