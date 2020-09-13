@@ -8,7 +8,6 @@ var rawXMin = 100000;
 var rawYMin = 100000;
 var rawXMax = -100000;
 var rawYMax = -100000;
-
 Leap.loop(controllerOptions,function (frame) {
     clear();
     HandleFrame(frame);
@@ -100,4 +99,5 @@ function scaleValue(value, from, to) {
     var capped = Math.min(from[1], Math.max(from[0], value)) - from[0];
     return ~~(capped * scale + to[0]);
 }
+
 

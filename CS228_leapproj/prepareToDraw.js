@@ -1,3 +1,3 @@
-function setup() {
-    createCanvas(window.innerWidth,window.innerHeight);
+function setup(){
+    createCanvas(window.innerWidth, window.innerHeight);
 }
