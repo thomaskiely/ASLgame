@@ -67,14 +67,9 @@ function HandleFinger(finger){
     y = window.innerHeight - convertRange(finger.tipPosition[1],[rawYMin,rawYMax],[0,window.innerHeight]);
     z = finger.tipPosition[2];
 
-    /*circle(x,y,50);
-    circle(x,y,50);
-    circle(x,y,50);
-    circle(x,y,50);
-    circle(x,y,50);*/
 
 
-    //circle(x,y,50);
+
 
     for(var i =0; i<finger.bones.length;++i){
         handleBone(finger.bones[i]);
@@ -83,7 +78,46 @@ function HandleFinger(finger){
 }
 
 function handleBone(bone){
-    console.log(bone.type);
+    x = bone.prevJoint[0];
+    y=bone.prevJoint[1];
+    z=bone.prevJoint[2];
+
+    if(x < rawXMin){
+
+        rawXMin = x;
+
+    }
+    if(y < rawYMin){
+        rawYMin = y;
+
+    }
+    if(x > rawXMax){
+
+        rawXMax = x;
+
+
+    }
+    if(y > rawYMax){
+
+        rawYMax = y;
+
+    }
+   /* x = bone.prevJoint[0];
+    y=bone.prevJoint[1];
+    z=bone.prevJoint[2];*/
+
+    x = convertRange(x,[rawXMin,rawXMax],[0,window.innerWidth]);
+    y = window.innerHeight - convertRange(y,[rawYMin,rawYMax],[0,window.innerHeight]);
+
+
+
+    circle(x,y,50);
+    circle(x,y,50);
+    circle(x,y,50);
+    circle(x,y,50);
+    circle(x,y,50);
+
+
 }
 
 
