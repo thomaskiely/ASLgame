@@ -31,11 +31,21 @@ function HandleHand(hand) {
 
     var fingers = hand.fingers;
 
-    for(var i=0; i<fingers.length;++i) {
+    /*for(var i=0; i<fingers.length;++i) {
         //if (fingers[i].type == 1) {
         HandleFinger(fingers[i]);
 
         //}
+    }*/
+    var strokeWeight = 3;
+    var width = 100;
+
+    for(var j = 3; j>=0;j--){
+        for(var i = 0;i<fingers.length;i++){
+            handleBone(fingers[i].bones[j],width,strokeWeight);
+        }
+        strokeWeight+=1;
+        width+=30;
     }
 }
 
@@ -77,7 +87,8 @@ function HandleFinger(finger){
 
 }
 
-function handleBone(bone){
+function handleBone(bone, width, startWeight){
+
     //base coordinates
     x = bone.prevJoint[0];
     y=bone.prevJoint[1];
@@ -96,11 +107,14 @@ function handleBone(bone){
 
 
     //draw lines
+    //strokeWeight(20);
+    strokeWeight(startWeight);
+    stroke(width);
     line(x,y,x2,y2);
-    line(x,y,x2,y2);
-    line(x,y,x2,y2);
-    line(x,y,x2,y2);
-    line(x,y,x2,y2);
+
+
+
+
 
 
 
