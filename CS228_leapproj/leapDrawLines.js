@@ -78,44 +78,31 @@ function HandleFinger(finger){
 }
 
 function handleBone(bone){
+    //base coordinates
     x = bone.prevJoint[0];
     y=bone.prevJoint[1];
     z=bone.prevJoint[2];
 
-    if(x < rawXMin){
-
-        rawXMin = x;
-
-    }
-    if(y < rawYMin){
-        rawYMin = y;
-
-    }
-    if(x > rawXMax){
-
-        rawXMax = x;
-
-
-    }
-    if(y > rawYMax){
-
-        rawYMax = y;
-
-    }
-   /* x = bone.prevJoint[0];
-    y=bone.prevJoint[1];
-    z=bone.prevJoint[2];*/
-
-    x = convertRange(x,[rawXMin,rawXMax],[0,window.innerWidth]);
-    y = window.innerHeight - convertRange(y,[rawYMin,rawYMax],[0,window.innerHeight]);
+    //tip coordinates
+    var x2 = bone.nextJoint[0];
+    var y2 = bone.nextJoint[1];
+    //var z2 = bone.nextJoint[2];
 
 
 
-    circle(x,y,50);
-    circle(x,y,50);
-    circle(x,y,50);
-    circle(x,y,50);
-    circle(x,y,50);
+    //transform coordinates
+    [x,y] = transformCoordinates(x,y);
+    [x2,y2] = transformCoordinates(x2,y2);
+
+
+    //draw lines
+    line(x,y,x2,y2);
+    line(x,y,x2,y2);
+    line(x,y,x2,y2);
+    line(x,y,x2,y2);
+    line(x,y,x2,y2);
+
+
 
 
 }
@@ -136,4 +123,33 @@ function scaleValue(value, from, to) {
     var scale = (to[1] - to[0]) / (from[1] - from[0]);
     var capped = Math.min(from[1], Math.max(from[0], value)) - from[0];
     return ~~(capped * scale + to[0]);
+}
+
+function transformCoordinates(x,y) {
+    if(x < rawXMin){
+
+        rawXMin = x;
+
+    }
+    if(y < rawYMin){
+        rawYMin = y;
+
+    }
+    if(x > rawXMax){
+
+        rawXMax = x;
+
+
+    }
+    if(y > rawYMax){
+
+        rawYMax = y;
+
+    }
+
+
+    x = convertRange(x,[rawXMin,rawXMax],[0,window.innerWidth]);
+    y = window.innerHeight - convertRange(y,[rawYMin,rawYMax],[0,window.innerHeight]);
+
+    return[x,y]
 }
