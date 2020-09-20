@@ -8,10 +8,19 @@ var rawXMin = 100000;
 var rawYMin = 100000;
 var rawXMax = -100000;
 var rawYMax = -100000;
-Leap.loop(controllerOptions,function (frame) {
-    clear();
-    HandleFrame(frame);
 
+var previousNumHands = 0;
+var currentNumHands = 0;
+var i = 0;
+Leap.loop(controllerOptions,function (frame) {
+
+    /*clear();
+    HandleFrame(frame);*/
+    currentNumHands = frame.hands.length;
+    console.log("prev"+previousNumHands+"time"+i);
+    console.log("curr"+currentNumHands+"time"+i);
+    previousNumHands = currentNumHands;
+    i++;
 });
 //testing
 function HandleFrame(frame) {
