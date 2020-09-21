@@ -120,7 +120,7 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex){
     [x,y] = transformCoordinates(x,y);
     [x2,y2] = transformCoordinates(x2,y2);
     var coordSum = x+y+z+x2+y2+z2;
-    console.log(fingerIndex+"h");
+    
     //first coordinates final element is the value you want to set
     oneFrameOfData.set(fingerIndex,boneIndex,0,x);
     oneFrameOfData.set(fingerIndex,boneIndex,1,y);
@@ -129,7 +129,7 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex){
     oneFrameOfData.set(fingerIndex,boneIndex,4,y2);
     oneFrameOfData.set(fingerIndex,boneIndex,5,z2);
 
-    console.log(oneFrameOfData.toString());
+
     //draw lines
     //strokeWeight(20);
     strokeWeight(startWeight);
@@ -196,7 +196,7 @@ function transformCoordinates(x,y) {
 
 function RecordData() {
     if(currentNumHands==1 && previousNumHands==2){
-
+        console.log(oneFrameOfData.toString());
         background(0,0,0);
 
 
