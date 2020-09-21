@@ -16,18 +16,20 @@ Leap.loop(controllerOptions,function (frame) {
 
 
     currentNumHands = frame.hands.length;
+    //console.log(currentNumHands);
     clear();
     HandleFrame(frame);
+    RecordData();
     previousNumHands = currentNumHands;
     i++;
 });
-//testing
+
 function HandleFrame(frame) {
 
-    //circle(x,y,50);
 
 
-    if(frame.hands.length == 1){
+
+    if(frame.hands.length == 1 || frame.hands.length == 2){
         var hand = frame.hands[0];
         HandleHand(hand);
     }
@@ -46,14 +48,14 @@ function HandleHand(hand) {
         //}
     }*/
     var strokeWeight = 3;
-    var color = 170;
+    var color = 80;
 
     for(var j = 3; j>=0;j--){
         for(var i = 0;i<fingers.length;i++){
             handleBone(fingers[i].bones[j],color,strokeWeight);
         }
         strokeWeight+=1;
-        color+=30;
+        color+=70;
     }
 }
 
@@ -118,7 +120,13 @@ function handleBone(bone, color, startWeight){
     //strokeWeight(20);
     strokeWeight(startWeight);
     //stroke(width);
-    stroke(0,color,0);
+    if(currentNumHands==1){
+        stroke(0,color,0);
+    }
+    else if(currentNumHands==2){
+        stroke(color,0,0);
+    }
+
     line(x,y,x2,y2);
 
 
@@ -142,11 +150,6 @@ function convertRange( value, r1, r2 ) {
     return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
 }
 
-function scaleValue(value, from, to) {
-    var scale = (to[1] - to[0]) / (from[1] - from[0]);
-    var capped = Math.min(from[1], Math.max(from[0], value)) - from[0];
-    return ~~(capped * scale + to[0]);
-}
 
 function transformCoordinates(x,y) {
     if(x < rawXMin){
@@ -175,4 +178,13 @@ function transformCoordinates(x,y) {
     y = window.innerHeight - convertRange(y,[rawYMin,rawYMax],[0,window.innerHeight]);
 
     return[x,y]
+}
+
+function RecordData() {
+    if(currentNumHands==1 && previousNumHands==2){
+        
+        background(0,0,0);
+
+
+    }
 }
