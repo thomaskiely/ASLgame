@@ -1,169 +1,44 @@
-var controllerOptions = {};
 
-var x = window.innerWidth/2;
-var y = window.innerHeight/2;
-var z;
+var oneFrameOfData=nj.array([[[ 776.37237, 531.34297,    72.584, 776.37237, 531.34297,    72.584],
+    [ 776.37237, 531.34297,    72.584,  598.8915, 311.41516,   57.2641],
+    [  598.8915, 311.41516,   57.2641, 501.78822, 259.93308,   35.5633],
+    [ 501.78822, 259.93308,   35.5633, 424.28485,  186.3539,   24.5291]],
+    [[ 801.18989, 239.89152,    63.011, 602.38852,  90.98904,    14.183],
+        [ 602.38852,  90.98904,    14.183,  508.0575, 109.41109,  -18.7667],
+        [  508.0575, 109.41109,  -18.7667, 454.39451, 171.79378,  -36.7852],
+        [ 454.39451, 171.79378,  -36.7852, 416.73193, 243.23956,  -49.0444]],
+    [[  835.5804,  231.0153,   54.9479, 676.08915, 105.31557,   3.01422],
+        [ 676.08915, 105.31557,   3.01422, 590.92343, 111.10847,  -36.7034],
+        [ 590.92343, 111.10847,  -36.7034, 536.94517, 169.75381,  -59.3811],
+        [ 536.94517, 169.75381,  -59.3811, 499.85276, 236.45003,  -73.7673]],
+    [[ 872.01535, 265.99072,   47.7343, 760.46524, 173.77146,  -3.44309],
+        [ 760.46524, 173.77146,  -3.44309, 695.53404, 121.40177,  -41.5375],
+        [ 695.53404, 121.40177,  -41.5375, 650.30768, 135.88402,    -64.75],
+        [ 650.30768, 135.88402,    -64.75, 617.46789, 171.03074,  -80.0001]],
+    [[ 907.62002,  400.7691,   42.3545, 835.55477, 302.60123,  -7.89169],
+        [ 835.55477, 302.60123,  -7.89169,  831.7477, 300.60797,  -40.3757],
+        [  831.7477, 300.60797,  -40.3757, 824.56562, 328.46684,  -58.1848],
+        [ 824.56562, 328.46684,  -58.1848, 814.65298, 373.57984,  -73.5905]]]);
 
-var rawXMin = 100000;
-var rawYMin = 100000;
-var rawXMax = -100000;
-var rawYMax = -100000;
-Leap.loop(controllerOptions,function (frame) {
+
+function draw(){
+
     clear();
-    HandleFrame(frame);
+    //console.log(oneFrameOfData.toString());
+    for(var i =0; i<oneFrameOfData.shape[0];i++){
+        for(var j=0;j<oneFrameOfData.shape[1];j++){
+            //console.log(oneFrameOfData.toString());
+            var xStart = oneFrameOfData.get(i,j,0);
+            var yStart = oneFrameOfData.get(i,j,1);
+            var zStart = oneFrameOfData.get(i,j,2);
+            var xStart2 = oneFrameOfData.get(i,j,3);
+            var yStart2 = oneFrameOfData.get(i,j,4);
+            var zStart2 = oneFrameOfData.get(i,j,5);
+            console.log(xStart,yStart,zStart,xStart2,yStart2,zStart2);
 
-});
-//testing
-function HandleFrame(frame) {
-
-    //circle(x,y,50);
-
-
-    if(frame.hands.length == 1){
-        var hand = frame.hands[0];
-        HandleHand(hand);
-    }
-}
-
-
-
-function HandleHand(hand) {
-
-    var fingers = hand.fingers;
-
-    /*for(var i=0; i<fingers.length;++i) {
-        //if (fingers[i].type == 1) {
-        HandleFinger(fingers[i]);
-
-        //}
-    }*/
-    var strokeWeight = 3;
-    var width = 100;
-
-    for(var j = 3; j>=0;j--){
-        for(var i = 0;i<fingers.length;i++){
-            handleBone(fingers[i].bones[j],width,strokeWeight);
         }
-        strokeWeight+=1;
-        width+=30;
     }
-}
-
-function HandleFinger(finger){
-
-
-    if(finger.tipPosition[0] < rawXMin){
-
-        rawXMin = finger.tipPosition[0];
-
-    }
-    if(finger.tipPosition[1] < rawYMin){
-        rawYMin = finger.tipPosition[1];
-
-    }
-    if(finger.tipPosition[0] > rawXMax){
-
-        rawXMax = finger.tipPosition[0];
-
-
-    }
-    if(finger.tipPosition[1] > rawYMax){
-
-        rawYMax = finger.tipPosition[1];
-
-    }
-
-    x = convertRange(finger.tipPosition[0],[rawXMin,rawXMax],[0,window.innerWidth]);
-    y = window.innerHeight - convertRange(finger.tipPosition[1],[rawYMin,rawYMax],[0,window.innerHeight]);
-    z = finger.tipPosition[2];
-
-
-
-
-
-    for(var i =0; i<finger.bones.length;++i){
-        handleBone(finger.bones[i]);
-    }
-
-}
-
-function handleBone(bone, width, startWeight){
-
-    //base coordinates
-    x = bone.prevJoint[0];
-    y=bone.prevJoint[1];
-    z=bone.prevJoint[2];
-
-    //tip coordinates
-    var x2 = bone.nextJoint[0];
-    var y2 = bone.nextJoint[1];
-    //var z2 = bone.nextJoint[2];
-
-
-
-    //transform coordinates
-    [x,y] = transformCoordinates(x,y);
-    [x2,y2] = transformCoordinates(x2,y2);
-
-
-    //draw lines
-    //strokeWeight(20);
-    strokeWeight(startWeight);
-    stroke(width);
-    line(x,y,x2,y2);
-
-
-
-
-
-
 
 
 }
 
-
-
-
-//should be between raw min,x,rawmax
-//new min, new x, new max
-
-function convertRange( value, r1, r2 ) {
-    //(finger position - RawMin)*(window.innerheight - 0) / (RawMax-rawMin)+0
-
-    return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
-}
-
-function scaleValue(value, from, to) {
-    var scale = (to[1] - to[0]) / (from[1] - from[0]);
-    var capped = Math.min(from[1], Math.max(from[0], value)) - from[0];
-    return ~~(capped * scale + to[0]);
-}
-
-function transformCoordinates(x,y) {
-    if(x < rawXMin){
-
-        rawXMin = x;
-
-    }
-    if(y < rawYMin){
-        rawYMin = y;
-
-    }
-    if(x > rawXMax){
-
-        rawXMax = x;
-
-
-    }
-    if(y > rawYMax){
-
-        rawYMax = y;
-
-    }
-
-
-    x = convertRange(x,[rawXMin,rawXMax],[0,window.innerWidth]);
-    y = window.innerHeight - convertRange(y,[rawYMin,rawYMax],[0,window.innerHeight]);
-
-    return[x,y]
-}
