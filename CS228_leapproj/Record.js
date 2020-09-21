@@ -14,7 +14,7 @@ var previousNumHands = 0;
 var currentNumHands = 0;
 
 
-var oneFrameOfData = nj.zeros([5]);
+var oneFrameOfData = nj.zeros([5,4]);
 Leap.loop(controllerOptions,function (frame) {
 
 
@@ -57,7 +57,7 @@ function HandleHand(hand) {
 
     for(var j = 3; j>=0;j--){
         for(var i = 0;i<fingers.length;i++){
-            handleBone(fingers[i].bones[j],color,strokeWeight,i);
+            handleBone(fingers[i].bones[j],color,strokeWeight,i,j);
         }
         strokeWeight+=1;
         color+=70;
@@ -102,7 +102,7 @@ function HandleFinger(finger){
 
 }
 
-function handleBone(bone, color, startWeight,fingerIndex){
+function handleBone(bone, color, startWeight,fingerIndex,boneIndex){
 
     //base coordinates
     x = bone.prevJoint[0];
@@ -121,7 +121,7 @@ function handleBone(bone, color, startWeight,fingerIndex){
     [x2,y2] = transformCoordinates(x2,y2);
     var coordSum = x+y+z+x2+y2+z2;
     console.log(fingerIndex+"h");
-    oneFrameOfData.set(fingerIndex,coordSum);
+    oneFrameOfData.set(fingerIndex,boneIndex,coordSum);
     console.log(oneFrameOfData.toString());
     //draw lines
     //strokeWeight(20);
