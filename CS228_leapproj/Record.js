@@ -14,7 +14,7 @@ var previousNumHands = 0;
 var currentNumHands = 0;
 
 
-var oneFrameOfData = nj.zeros([5,4]);
+var oneFrameOfData = nj.zeros([5,4,6]);
 Leap.loop(controllerOptions,function (frame) {
 
 
@@ -121,7 +121,14 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex){
     [x2,y2] = transformCoordinates(x2,y2);
     var coordSum = x+y+z+x2+y2+z2;
     console.log(fingerIndex+"h");
-    oneFrameOfData.set(fingerIndex,boneIndex,coordSum);
+    //first coordinates final element is the value you want to set
+    oneFrameOfData.set(fingerIndex,boneIndex,0,x);
+    oneFrameOfData.set(fingerIndex,boneIndex,1,y);
+    oneFrameOfData.set(fingerIndex,boneIndex,2,z);
+    oneFrameOfData.set(fingerIndex,boneIndex,3,x2);
+    oneFrameOfData.set(fingerIndex,boneIndex,4,y2);
+    oneFrameOfData.set(fingerIndex,boneIndex,5,z2);
+
     console.log(oneFrameOfData.toString());
     //draw lines
     //strokeWeight(20);
