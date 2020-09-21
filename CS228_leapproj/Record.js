@@ -14,11 +14,10 @@ var currentNumHands = 0;
 var i = 0;
 Leap.loop(controllerOptions,function (frame) {
 
-    /*clear();
-    HandleFrame(frame);*/
+
     currentNumHands = frame.hands.length;
-    console.log("prev"+previousNumHands+"time"+i);
-    console.log("curr"+currentNumHands+"time"+i);
+    clear();
+    HandleFrame(frame);
     previousNumHands = currentNumHands;
     i++;
 });
@@ -47,14 +46,14 @@ function HandleHand(hand) {
         //}
     }*/
     var strokeWeight = 3;
-    var width = 100;
+    var color = 170;
 
     for(var j = 3; j>=0;j--){
         for(var i = 0;i<fingers.length;i++){
-            handleBone(fingers[i].bones[j],width,strokeWeight);
+            handleBone(fingers[i].bones[j],color,strokeWeight);
         }
         strokeWeight+=1;
-        width+=30;
+        color+=30;
     }
 }
 
@@ -96,7 +95,7 @@ function HandleFinger(finger){
 
 }
 
-function handleBone(bone, width, startWeight){
+function handleBone(bone, color, startWeight){
 
     //base coordinates
     x = bone.prevJoint[0];
@@ -118,7 +117,8 @@ function handleBone(bone, width, startWeight){
     //draw lines
     //strokeWeight(20);
     strokeWeight(startWeight);
-    stroke(width);
+    //stroke(width);
+    stroke(0,color,0);
     line(x,y,x2,y2);
 
 
