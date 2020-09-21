@@ -20,6 +20,27 @@ var oneFrameOfData=nj.array([[[ 776.37237, 531.34297,    72.584, 776.37237, 531.
         [  831.7477, 300.60797,  -40.3757, 824.56562, 328.46684,  -58.1848],
         [ 824.56562, 328.46684,  -58.1848, 814.65298, 373.57984,  -73.5905]]]);
 
+var anotherFrameOfData=nj.array([[[ 724.03938, 586.40835,   49.7576, 724.03938, 586.40835,   49.7576],
+    [ 724.03938, 586.40835,   49.7576, 559.38285, 451.17425,   24.1363],
+    [ 559.38285, 451.17425,   24.1363, 475.66378, 432.44237,  -2.61699],
+    [ 475.66378, 432.44237,  -2.61699, 399.21334, 371.45691,  -15.0059]],
+    [[ 749.55569, 329.17818,   39.6613, 583.78417, 258.60049,  -20.6544],
+        [ 583.78417, 258.60049,  -20.6544, 496.94736, 261.10226,  -57.6335],
+        [ 496.94736, 261.10226,  -57.6335, 447.91199,  316.7196,  -77.9345],
+        [ 447.91199,  316.7196,  -77.9345, 413.92744, 385.10981,  -91.6846]],
+    [[ 788.42853, 316.92074,   32.2571,  663.6765, 259.37994,  -29.8678],
+        [  663.6765, 259.37994,  -29.8678, 582.80654, 248.04023,  -73.5445],
+        [ 582.80654, 248.04023,  -73.5445, 531.08041, 306.93879,  -98.3836],
+        [ 531.08041, 306.93879,  -98.3836, 495.66761, 379.20109,  -113.893]],
+    [[ 829.52018, 342.34078,   25.9531, 751.91188, 303.63243,  -33.4798],
+        [ 751.91188, 303.63243,  -33.4798,  681.7347, 309.41542,  -74.5126],
+        [  681.7347, 309.41542,  -74.5126, 636.68151, 329.73134,  -99.7325],
+        [ 636.68151, 329.73134,  -99.7325, 605.53738, 352.20959,  -116.596]],
+    [[ 870.34579, 454.74462,   21.8405,  830.7757, 402.04393,  -35.1279],
+        [  830.7757, 402.04393,  -35.1279, 806.09959,  422.2467,  -69.8996],
+        [ 806.09959,  422.2467,  -69.8996, 790.29157, 446.44728,  -88.9519],
+        [ 790.29157, 446.44728,  -88.9519,  774.9227, 476.58172,  -105.577]]]);
+
 
 function draw(){
 
@@ -27,14 +48,24 @@ function draw(){
     //console.log(oneFrameOfData.toString());
     for(var i =0; i<oneFrameOfData.shape[0];i++){
         for(var j=0;j<oneFrameOfData.shape[1];j++){
-            //console.log(oneFrameOfData.toString());
+            //get coordinates of one hand
             var xStart = oneFrameOfData.get(i,j,0);
             var yStart = oneFrameOfData.get(i,j,1);
             var zStart = oneFrameOfData.get(i,j,2);
             var xStart2 = oneFrameOfData.get(i,j,3);
             var yStart2 = oneFrameOfData.get(i,j,4);
             var zStart2 = oneFrameOfData.get(i,j,5);
-            console.log(xStart,yStart,zStart,xStart2,yStart2,zStart2);
+
+            //get coordiantes of the other
+            var xStart3 = anotherFrameOfData.get(i,j,0);
+            var yStart3 = anotherFrameOfData.get(i,j,1);
+            var zStart3 = anotherFrameOfData.get(i,j,2);
+            var xStart4 = anotherFrameOfData.get(i,j,3);
+            var yStart4 = anotherFrameOfData.get(i,j,4);
+            var zStart4 = anotherFrameOfData.get(i,j,5);
+
+            line(xStart,yStart,xStart2,yStart2);
+            line(xStart3,yStart3,xStart4,yStart4);
 
         }
     }
