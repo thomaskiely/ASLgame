@@ -155,6 +155,7 @@ var irisData = nj.array([[	5.1	,	3.5	,	1.4	,	0.2	,	0	],
 var trainingCompleted = false;
 var numSamples = irisData.shape[0];
 var numFeatures = irisData.shape[1] -1;
+var testingSampleIndex = 1;
 
 function draw(){
 
@@ -187,24 +188,31 @@ function Train(){
 }
 
 function Test() {
-    for(var i=1; i<=numSamples-1;i+=2){
+    //for(var i=1; i<=numSamples-1;i+=2){
         //console.log(i,irisData.pick(i).toString());
-        var currentFeatures = irisData.pick(i).slice([0,4]);
-        var currentLabel = irisData.pick(i).get(4);
+    var firstOddRow = irisData.pick(testingSampleIndex);
+    var currentFeatures = irisData.pick(testingSampleIndex).slice([0,4]);
+    var currentLabel = irisData.pick(testingSampleIndex).get(4);
 
         //console.log(currentFeatures.toString(),currentLabel);
 
         //var predictedLabel = knnClassifier.classify(currentFeatures.tolist());
-        var predictedLabel = knnClassifier.classify(currentFeatures.tolist(),GotResults);
+    var predictedLabel = knnClassifier.classify(currentFeatures.tolist(),GotResults);
+    //console.log(firstOddRow.toString(),currentFeatures.toString(),currentLabel);
 
         //console.log(i,currentFeatures.toString(),currentLabel,predictedLabel);
-        //console.log(predictedLabel);
-    }
+    //console.log(predictedLabel);
+    //}
 
 }
 
 
 function GotResults(err, result){
     console.log(parseInt(result.label));
+    console.log(testingSampleIndex);
+    testingSampleIndex+=2;
+    if(testingSampleIndex>=150){
+        testingSampleIndex=1;
+    }
 }
 
