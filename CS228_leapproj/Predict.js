@@ -156,63 +156,106 @@ var trainingCompleted = false;
 var numSamples = irisData.shape[0];
 var numFeatures = irisData.shape[1] -1;
 var testingSampleIndex = 1;
-
+var predictedClassLabels = nj.zeros(numSamples);
+var x = 0;
 function draw(){
+    console.log(x);
+    x++;
 
     clear();
 
     if (trainingCompleted == false){
 
         Train();
-
+        trainingCompleted = true;
     }
 
     Test();
-    
+    DrawCircles();
 }
 
 function Train(){
-    console.log("I am being trained");
+    //console.log("I am being trained");
 
     for(var i =0;i<=numSamples-2;i+=2){
 
         var currentFeatures = irisData.pick(i).slice([0,4]);
         var currentLabel = irisData.pick(i).get(4);
-        //console.log(i,currentFeatures.toString(),currentLabel.toString(),irisData.pick(i).get(4).toString());
-        //console.log(i+irisData.pick(i).slice([0,4]).toString());
+
+
         knnClassifier.addExample(currentFeatures.tolist(),currentLabel);
 
     }
 
-    trainingCompleted = true;
+    //trainingCompleted = true;
 }
 
 function Test() {
-    //for(var i=1; i<=numSamples-1;i+=2){
-        //console.log(i,irisData.pick(i).toString());
+    
     var firstOddRow = irisData.pick(testingSampleIndex);
     var currentFeatures = irisData.pick(testingSampleIndex).slice([0,4]);
     var currentLabel = irisData.pick(testingSampleIndex).get(4);
 
-        //console.log(currentFeatures.toString(),currentLabel);
 
-        //var predictedLabel = knnClassifier.classify(currentFeatures.tolist());
+
+
     var predictedLabel = knnClassifier.classify(currentFeatures.tolist(),GotResults);
-    //console.log(firstOddRow.toString(),currentFeatures.toString(),currentLabel);
 
-        //console.log(i,currentFeatures.toString(),currentLabel,predictedLabel);
-    //console.log(predictedLabel);
-    //}
+
+
 
 }
 
 
 function GotResults(err, result){
-    console.log(parseInt(result.label));
-    console.log(testingSampleIndex);
+    //console.log(parseInt(result.label));
+    //console.log(testingSampleIndex);
+    predictedClassLabels.set(testingSampleIndex,parseInt(result.label));
     testingSampleIndex+=2;
-    if(testingSampleIndex>=150){
+    if(testingSampleIndex>149){
         testingSampleIndex=1;
+    }
+}
+
+function DrawCircles() {
+    for(var i=0; i<numSamples;++i){
+        //console.log(i);
+        var x = irisData.get(i,0);
+        var y = irisData.get(i,1);
+        var c = irisData.get(i,4);
+
+
+        //console.log(c);
+        //console.log(irisData.pick(i.toString()));
+
+        if(i%2==0){
+            stroke(0);
+        }
+        else{
+            if(predictedClassLabels.get(i)===0){
+                stroke(255,0,0);
+            }
+            else if(predictedClassLabels.get(i)===1){
+                stroke(0,0,255);
+            }
+            else if(predictedClassLabels.get(i)===2){
+                stroke(0,255,0);
+            }
+        }
+
+        if(c===0){
+            fill(255,0,0);
+        }
+        else if(c===1){
+            fill(0,0,255);
+        }
+        else if(c===2){
+            fill(0,255,0);
+        }
+
+
+        circle(x*100,y*100,10);
+        //console.log(predictedClassLabels.toString());
     }
 }
 
