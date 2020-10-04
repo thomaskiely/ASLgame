@@ -54,7 +54,7 @@ function Test() {
 
     firstTestFeatures = firstTestFeatures.reshape(1,120);
     secondTestFeatures = secondTestFeatures.reshape(1,120);
-    
+
     var firstTestingSample = firstTestFeatures.pick(testingSampleIndex);
     var secondTestingSample = secondTestFeatures.pick(testingSampleIndex);
     var firstPrediction = knnClassifier.classify(firstTestingSample.tolist(),GotResults);
