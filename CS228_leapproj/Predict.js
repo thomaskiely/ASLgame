@@ -165,7 +165,7 @@ function draw(){
     if (trainingCompleted == false){
 
         Train();
-        trainingCompleted = true;
+        //trainingCompleted = true;
     }
 
     Test();
@@ -185,7 +185,7 @@ function Train(){
 
     }
 
-    //trainingCompleted = true;
+    trainingCompleted = true;
 }
 
 function Test() {
