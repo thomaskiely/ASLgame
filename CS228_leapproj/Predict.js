@@ -157,10 +157,8 @@ var numSamples = irisData.shape[0];
 var numFeatures = irisData.shape[1] -1;
 var testingSampleIndex = 1;
 var predictedClassLabels = nj.zeros(numSamples);
-var x = 0;
+
 function draw(){
-    console.log(x);
-    x++;
 
     clear();
 
@@ -200,6 +198,7 @@ function Test() {
 
 
     var predictedLabel = knnClassifier.classify(currentFeatures.tolist(),GotResults);
+    //knnClassifier.classify(currentFeatures.tolist(),GotResults);
 
 
 

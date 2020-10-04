@@ -29,41 +29,87 @@ Leap.loop(controllerOptions,function (frame) {
 });
 
 function HandleFrame(frame) {
-
+    var iBox = frame.interactionBox;
 
 
 
     if(frame.hands.length == 1 || frame.hands.length == 2){
         var hand = frame.hands[0];
-        HandleHand(hand);
+        HandleHand(hand,iBox);
     }
 }
 
 
 
-function HandleHand(hand) {
-
+function HandleHand(hand, interactionBox) {
     //array of fingers
     var fingers = hand.fingers;
 
-    /*for(var i=0; i<fingers.length;++i) {
-        //if (fingers[i].type == 1) {
-        HandleFinger(fingers[i]);
-
-        //}
-    }*/
     var strokeWeight = 3;
     var color = 80;
 
     for(var j = 3; j>=0;j--){
         for(var i = 0;i<fingers.length;i++){
-            handleBone(fingers[i].bones[j],color,strokeWeight,i,j);
+            handleBone(fingers[i].bones[j],color,strokeWeight,i,j,interactionBox);
         }
         strokeWeight+=1;
         color+=70;
     }
 }
 
+
+function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionBox){
+
+
+    //base coordinates
+    x = bone.prevJoint[0];
+    y=bone.prevJoint[1];
+    z=bone.prevJoint[2];
+
+    //tip coordinates
+    var x2 = bone.nextJoint[0];
+    var y2 = bone.nextJoint[1];
+    var z2 = bone.nextJoint[2];
+
+
+    //console.log(bone.prevJoint.toString());
+
+
+    //transform coordinates
+    [x,y] = transformCoordinates(x,y);
+    [x2,y2] = transformCoordinates(x2,y2);
+
+    //normalize coordinates for prevJoint and nextJoing
+    var normalizedPrevJoint = interactionBox.normalizePoint(bone.prevJoint,true);
+    //console.log(normalizedPrevJoint.toString());
+
+    var normalizedNextJoint = interactionBox.normalizePoint(bone.nextJoint,true);
+    console.log(normalizedNextJoint.toString());
+
+    //first coordinates final element is the value you want to set
+    oneFrameOfData.set(fingerIndex,boneIndex,0,x);
+    oneFrameOfData.set(fingerIndex,boneIndex,1,y);
+    oneFrameOfData.set(fingerIndex,boneIndex,2,z);
+    oneFrameOfData.set(fingerIndex,boneIndex,3,x2);
+    oneFrameOfData.set(fingerIndex,boneIndex,4,y2);
+    oneFrameOfData.set(fingerIndex,boneIndex,5,z2);
+
+
+    //draw lines
+
+    strokeWeight(startWeight);
+
+    if(currentNumHands==1){
+        stroke(0,color,0);
+    }
+    else if(currentNumHands==2){
+        stroke(color,0,0);
+    }
+    line(x,y,x2,y2);
+}
+
+
+/*
 function HandleFinger(finger){
 
 
@@ -101,62 +147,9 @@ function HandleFinger(finger){
     }
 
 }
-
-function handleBone(bone, color, startWeight,fingerIndex,boneIndex){
-
-    //base coordinates
-    x = bone.prevJoint[0];
-    y=bone.prevJoint[1];
-    z=bone.prevJoint[2];
-
-    //tip coordinates
-    var x2 = bone.nextJoint[0];
-    var y2 = bone.nextJoint[1];
-    var z2 = bone.nextJoint[2];
+*/
 
 
-
-    //transform coordinates
-    [x,y] = transformCoordinates(x,y);
-    [x2,y2] = transformCoordinates(x2,y2);
-    var coordSum = x+y+z+x2+y2+z2;
-    
-    //first coordinates final element is the value you want to set
-    oneFrameOfData.set(fingerIndex,boneIndex,0,x);
-    oneFrameOfData.set(fingerIndex,boneIndex,1,y);
-    oneFrameOfData.set(fingerIndex,boneIndex,2,z);
-    oneFrameOfData.set(fingerIndex,boneIndex,3,x2);
-    oneFrameOfData.set(fingerIndex,boneIndex,4,y2);
-    oneFrameOfData.set(fingerIndex,boneIndex,5,z2);
-
-
-    //draw lines
-    //strokeWeight(20);
-    strokeWeight(startWeight);
-    //stroke(width);
-    if(currentNumHands==1){
-        stroke(0,color,0);
-    }
-    else if(currentNumHands==2){
-        stroke(color,0,0);
-    }
-
-    line(x,y,x2,y2);
-
-
-
-
-
-
-
-
-}
-
-
-
-
-//should be between raw min,x,rawmax
-//new min, new x, new max
 
 function convertRange( value, r1, r2 ) {
     //(finger position - RawMin)*(window.innerheight - 0) / (RawMax-rawMin)+0
@@ -202,3 +195,4 @@ function RecordData() {
 
     }
 }
+
