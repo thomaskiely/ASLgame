@@ -1,5 +1,5 @@
 var controllerOptions = {};
-
+nj.config.printThreshold = 1000;
 var x = window.innerWidth/2;
 var y = window.innerHeight/2;
 var z;
@@ -103,9 +103,11 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
 
 
     //draw lines
-    strokeWeight(startWeight);
+    strokeWeight(startWeight*5);
     if(currentNumHands==1){
+
         stroke(0,color,0);
+
     }
     else if(currentNumHands==2){
         stroke(color,0,0);
@@ -194,23 +196,26 @@ function convertRange( value, r1, r2 ) {
 }*/
 
 function RecordData() {
+
+
+    if(currentNumHands==2){
+
+        currentSample++;
+        if(currentSample==numSamples){
+            currentSample = 0;
+        }
+    }
+
+
     if(currentNumHands==1 && previousNumHands==2){
         //console.log(framesOfData.toString());
-        //console.log( framesOfData.pick(null,null,null,1).toString() );
+        console.log(framesOfData.toString());
 
 
 
         background(0,0,0);
 
 
-    }
-
-    if(currentNumHands==2){
-        console.log(currentSample);
-        currentSample++;
-        if(currentSample==numSamples){
-            currentSample = 0;
-        }
     }
 }
 
