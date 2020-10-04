@@ -4,10 +4,10 @@ var x = window.innerWidth/2;
 var y = window.innerHeight/2;
 var z;
 
-var rawXMin = 100000;
+/*var rawXMin = 100000;
 var rawYMin = 100000;
 var rawXMax = -100000;
-var rawYMax = -100000;
+var rawYMax = -100000;*/
 
 
 var previousNumHands = 0;
@@ -76,15 +76,25 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
 
 
     //transform coordinates
-    [x,y] = transformCoordinates(x,y);
-    [x2,y2] = transformCoordinates(x2,y2);
+    //[x,y] = transformCoordinates(x,y);
+    //[x2,y2] = transformCoordinates(x2,y2);
 
     //normalize coordinates for prevJoint and nextJoing
     var normalizedPrevJoint = interactionBox.normalizePoint(bone.prevJoint,true);
-    //console.log(normalizedPrevJoint.toString());
-
     var normalizedNextJoint = interactionBox.normalizePoint(bone.nextJoint,true);
-    console.log(normalizedNextJoint.toString());
+
+
+    //convert normalized coordinates to span the canvas
+    //prevJoint
+    var canvasXPrev = window.innerWidth * normalizedPrevJoint[0];
+    var canvasYPrev = window.innerHeight *(1-normalizedPrevJoint[1]);
+
+    //nextJoint
+    var canvasXNext = window.innerWidth * normalizedNextJoint[0];
+    var canvasYNext = window.innerHeight *(1-normalizedNextJoint[1]);
+
+
+
 
     //first coordinates final element is the value you want to set
     oneFrameOfData.set(fingerIndex,boneIndex,0,x);
@@ -158,7 +168,7 @@ function convertRange( value, r1, r2 ) {
 }
 
 
-function transformCoordinates(x,y) {
+/*function transformCoordinates(x,y) {
     if(x < rawXMin){
 
         rawXMin = x;
@@ -185,7 +195,7 @@ function transformCoordinates(x,y) {
     y = window.innerHeight - convertRange(y,[rawYMin,rawYMax],[0,window.innerHeight]);
 
     return[x,y]
-}
+}*/
 
 function RecordData() {
     if(currentNumHands==1 && previousNumHands==2){
