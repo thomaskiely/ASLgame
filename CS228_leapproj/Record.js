@@ -12,7 +12,7 @@ var rawYMax = -100000;*/
 
 var previousNumHands = 0;
 var currentNumHands = 0;
-var numSamples = 2;
+var numSamples = 100;
 var currentSample = 0;
 
 var framesOfData = nj.zeros([5,4,6,numSamples]);
@@ -22,7 +22,10 @@ Leap.loop(controllerOptions,function (frame) {
     currentNumHands = frame.hands.length;
     clear();
     HandleFrame(frame);
+
     RecordData();
+
+
     previousNumHands = currentNumHands;
 
 
@@ -209,9 +212,8 @@ function RecordData() {
 
     if(currentNumHands==1 && previousNumHands==2){
         //console.log(framesOfData.toString());
+
         console.log(framesOfData.toString());
-
-
 
         background(0,0,0);
 
