@@ -1,7 +1,7 @@
 const knnClassifier = ml5.KNNClassifier();
 nj.config.printThreshold = 1000;
 var trainingCompleted = false;
-var predictedClassLabels = nj.zeros(1,test.shape[3]);
+var predictedClassLabels = nj.zeros([1,test.shape[3]]);
 
 var testingSampleIndex = 0;
 
@@ -39,10 +39,11 @@ function Train(){
 
 function Test() {
 
-    var firstFeatures = train5.pick(null,null,null,testingSampleIndex);
+    var firstFeatures = test.pick(null,null,null,testingSampleIndex);
     var currentFeatures = firstFeatures.reshape(1,120);
-    var currentTestingSample = currentFeatures.pick(testingSampleIndex);
-    knnClassifier.classify(currentTestingSample.tolist(),GotResults);
+    //var currentTestingSample = currentFeatures.pick(testingSampleIndex);
+    //knnClassifier.classify(currentTestingSample.tolist(),GotResults);
+    knnClassifier.classify(currentFeatures.tolist(),GotResults);
 }
 
 
@@ -52,7 +53,6 @@ function GotResults(err, result){
     console.log(result.label);
     if(testingSampleIndex>test.shape[3]-2){
         testingSampleIndex=0;
-        console.log("zero");
     }
     else{
         testingSampleIndex++;
