@@ -26,11 +26,13 @@ function Train(){
     for(var i =0; i<train4.shape[3];++i){
 
         //train4
+        CenterData();
         var features = train4.pick(null,null,null,i);
         features = features.reshape(1,120);
         knnClassifier.addExample(features.tolist(),4);
 
         //train 5
+        CenterData();
         var featuresOne = train5.pick(null,null,null,i);
         featuresOne = featuresOne.reshape(1,120);
         knnClassifier.addExample(featuresOne.tolist(),5);
@@ -51,15 +53,21 @@ function GotResults(err, result){
     var currentPrediction = result.label;
     numPredictions++;
     meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
-    //console.log(numPredictions, meanPredictionAccuracy, currentPrediction);
+    console.log(numPredictions, meanPredictionAccuracy, currentPrediction);
 }
 
+
 function CenterData(){
+    CenterXData();
+    CenterYData();
+    CenterZData();
+}
+function CenterXData(){
     var xValues = oneFrameOfData.slice([],[],[0,6,3]);
     //console.log(xValues.shape);
-    var currentMean = xValues.mean();
-    //console.log(currentMean);
-    var horizontalShift = 0.5-currentMean;
+    var currentXMean = xValues.mean();
+    //console.log(currentXMean);
+    var horizontalShift = 0.5-currentXMean;
 
     for(var i=0; i<oneFrameOfData.shape[0];++i){
         for(var j=0; j<oneFrameOfData.shape[1];++j){
@@ -72,9 +80,9 @@ function CenterData(){
             oneFrameOfData.set(i,j,3, shiftedX);
         }
     }
-    currentMean = xValues.mean();
-    //console.log(currentMean);
-    CenterYData();
+    currentXMean = xValues.mean();
+    //console.log(currentXMean);
+
 }
 
 function CenterYData(){
@@ -96,11 +104,27 @@ function CenterYData(){
         }
     }
     currentYMean = yValues.mean();
-    console.log(currentYMean);
+    //console.log(currentYMean);
 }
 
 function CenterZData(){
-    
+    var zValues = oneFrameOfData.slice([],[],[2,6,3]);
+    var currentZMean = zValues.mean();
+    var spacialShift = 0.5-currentZMean;
+    //console.log(currentZMean);
+    for(var i = 0; i<oneFrameOfData.shape[0];++i){
+        for(var j = 0; j<oneFrameOfData.shape[1];++j){
+            var currentZ = oneFrameOfData.get(i,j,2);
+            var shiftedZ = currentZ + spacialShift;
+            oneFrameOfData.set(i,j,2,shiftedZ);
+
+            currentZ = oneFrameOfData.get(i,j,5);
+            shiftedZ = currentZ + spacialShift;
+            oneFrameOfData.set(i,j,5,shiftedZ);
+        }
+    }
+    currentZMean = zValues.mean();
+    //console.log(currentZMean);
 }
 
 
