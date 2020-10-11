@@ -40,8 +40,6 @@ function HandleFrame(frame) {
     }
 }
 
-
-
 function HandleHand(hand, interactionBox) {
     //array of fingers
     var fingers = hand.fingers;
@@ -57,7 +55,6 @@ function HandleHand(hand, interactionBox) {
     }
 }
 
-
 function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionBox){
 
 
@@ -72,17 +69,9 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
     var z2 = bone.nextJoint[2];
 
 
-    //console.log(bone.prevJoint.toString());
-
-
-    //transform coordinates
-    //[x,y] = transformCoordinates(x,y);
-    //[x2,y2] = transformCoordinates(x2,y2);
-
     //normalize coordinates for prevJoint and nextJoint
     var normalizedPrevJoint = interactionBox.normalizePoint(bone.prevJoint,true);
     var normalizedNextJoint = interactionBox.normalizePoint(bone.nextJoint,true);
-
 
 
     //first coordinates final element is the value you want to set
