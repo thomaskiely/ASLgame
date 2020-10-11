@@ -4,6 +4,10 @@ var trainingCompleted = false;
 var controllerOptions = {};
 var currentNumHands = 0;
 var oneFrameOfData = nj.zeros([5,4,6]);
+var numPredictions = 0;
+var meanPredictionAccuracy=1;
+var hardDigit = 4;
+
 
 Leap.loop(controllerOptions,function (frame) {
 
@@ -36,13 +40,67 @@ function Train(){
 }
 
 function Test() {
+    CenterData();
     var currentFeatures = oneFrameOfData.reshape(1,120);
     knnClassifier.classify(currentFeatures.tolist(),GotResults);
 }
 
 
 function GotResults(err, result){
-    console.log(result.label);
+    //console.log(result.label);
+    var currentPrediction = result.label;
+    numPredictions++;
+    meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
+    //console.log(numPredictions, meanPredictionAccuracy, currentPrediction);
+}
+
+function CenterData(){
+    var xValues = oneFrameOfData.slice([],[],[0,6,3]);
+    //console.log(xValues.shape);
+    var currentMean = xValues.mean();
+    //console.log(currentMean);
+    var horizontalShift = 0.5-currentMean;
+
+    for(var i=0; i<oneFrameOfData.shape[0];++i){
+        for(var j=0; j<oneFrameOfData.shape[1];++j){
+            var currentX = oneFrameOfData.get(i,j,0);
+            var shiftedX = currentX + horizontalShift;
+            oneFrameOfData.set(i,j,0, shiftedX);
+            //3 denotes the next set of joints, before was previous, look at where oneFrameOfData is set
+            currentX = oneFrameOfData.get(i,j,3);
+            shiftedX = currentX + horizontalShift;
+            oneFrameOfData.set(i,j,3, shiftedX);
+        }
+    }
+    currentMean = xValues.mean();
+    //console.log(currentMean);
+    CenterYData();
+}
+
+function CenterYData(){
+    //y vals stored in second and fifth horizontal sheets
+    var yValues = oneFrameOfData.slice([],[],[1,6,3]);
+    var currentYMean = yValues.mean();
+    //console.log(currentYMean);
+    var verticalShift = 0.5-currentYMean;
+
+    for(var i=0;i<oneFrameOfData.shape[0];++i){
+        for (var j=0;j<oneFrameOfData.shape[1];++j){
+            var currentY = oneFrameOfData.get(i,j,1);
+            var shiftedY = currentY +verticalShift;
+            oneFrameOfData.set(i,j,1,shiftedY);
+
+            currentY = oneFrameOfData.get(i,j,4);
+            shiftedY = currentY +verticalShift;
+            oneFrameOfData.set(i,j,4,shiftedY);
+        }
+    }
+    currentYMean = yValues.mean();
+    console.log(currentYMean);
+}
+
+function CenterZData(){
+    
 }
 
 
@@ -97,7 +155,7 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
     oneFrameOfData.set(fingerIndex,boneIndex,4,normalizedNextJoint[1]);
     oneFrameOfData.set(fingerIndex,boneIndex,5,normalizedNextJoint[2]);
 
-    
+
     //convert normalized coordinates to span the canvas
     //prevJoint
     var canvasXPrev = window.innerWidth * normalizedPrevJoint[0];
