@@ -1,26 +1,20 @@
 const knnClassifier = ml5.KNNClassifier();
 nj.config.printThreshold = 1000;
 var trainingCompleted = false;
-var predictedClassLabels = nj.zeros([1,test.shape[3]]);
 var controllerOptions = {};
-var testingSampleIndex = 0;
 var currentNumHands = 0;
-
+var oneFrameOfData = nj.zeros([5,4,6]);
 
 Leap.loop(controllerOptions,function (frame) {
 
     currentNumHands = frame.hands.length;
     clear();
 
-
     if (trainingCompleted == false){
         Train();
 
     }
     HandleFrame(frame);
-    Test();
-
-
 
 });
 
@@ -39,33 +33,23 @@ function Train(){
 
     }
     trainingCompleted = true;
-
-
 }
 
 function Test() {
-    var firstFeatures = test.pick(null,null,null,testingSampleIndex);
-    var currentFeatures = firstFeatures.reshape(1,120);
+    var currentFeatures = oneFrameOfData.reshape(1,120);
     knnClassifier.classify(currentFeatures.tolist(),GotResults);
 }
 
 
 function GotResults(err, result){
-    predictedClassLabels.set(testingSampleIndex,parseInt(result.label));
-    //console.log(predictedClassLabels.get(testingSampleIndex).toString());
     console.log(result.label);
-    if(testingSampleIndex>test.shape[3]-2){
-        testingSampleIndex=0;
-    }
-    else{
-        testingSampleIndex++;
-    }
 }
 
 
 function HandleFrame(frame) {
     var iBox = frame.interactionBox;
     if(frame.hands.length == 1 || frame.hands.length == 2){
+        Test();
         var hand = frame.hands[0];
         HandleHand(hand,iBox);
     }
@@ -106,15 +90,14 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
 
 
     //first coordinates final element is the value you want to set
-    /*framesOfData.set(fingerIndex,boneIndex,0,currentSample,normalizedPrevJoint[0]);
-    framesOfData.set(fingerIndex,boneIndex,1,currentSample,normalizedPrevJoint[1]);
-    framesOfData.set(fingerIndex,boneIndex,2,currentSample,normalizedPrevJoint[2]);
-    framesOfData.set(fingerIndex,boneIndex,3,currentSample,normalizedNextJoint[0]);
-    framesOfData.set(fingerIndex,boneIndex,4,currentSample,normalizedNextJoint[1]);
-    framesOfData.set(fingerIndex,boneIndex,5,currentSample,normalizedNextJoint[2]);*/
+    oneFrameOfData.set(fingerIndex,boneIndex,0,normalizedPrevJoint[0]);
+    oneFrameOfData.set(fingerIndex,boneIndex,1,normalizedPrevJoint[1]);
+    oneFrameOfData.set(fingerIndex,boneIndex,2,normalizedPrevJoint[2]);
+    oneFrameOfData.set(fingerIndex,boneIndex,3,normalizedNextJoint[0]);
+    oneFrameOfData.set(fingerIndex,boneIndex,4,normalizedNextJoint[1]);
+    oneFrameOfData.set(fingerIndex,boneIndex,5,normalizedNextJoint[2]);
 
-
-
+    
     //convert normalized coordinates to span the canvas
     //prevJoint
     var canvasXPrev = window.innerWidth * normalizedPrevJoint[0];
@@ -133,7 +116,7 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
 
     }
     else if(currentNumHands==2){
-        stroke(startWeight*5);
+        stroke(color,0,0);
     }
     //line(x,y,x2,y2);
     line(canvasXPrev,canvasYPrev,canvasXNext,canvasYNext);
