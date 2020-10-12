@@ -24,6 +24,29 @@ Leap.loop(controllerOptions,function (frame) {
 
 function Train(){
     for(var i =0; i<train4.shape[3];++i){
+        //train0
+        CenterData();
+        var featuresZero = train0.pick(null,null,null,i);
+        featuresZero = featuresZero.reshape(1,120);
+        knnClassifier.addExample(featuresZero.tolist(),0);
+
+        //train1
+        CenterData();
+        var featuresOne = train1.pick(null,null,null,i);
+        featuresOne = featuresOne.reshape(1,120);
+        knnClassifier.addExample(featuresOne.tolist(),1);
+
+        //train2
+        CenterData();
+        var featuresTwo = train2.pick(null,null,null,i);
+        featuresTwo = featuresTwo.reshape(1,120);
+        knnClassifier.addExample(featuresTwo.tolist(),2);
+
+        //train 3
+        CenterData();
+        var featuresThree = train3.pick(null,null,null,i);
+        featuresThree = featuresThree.reshape(1,120);
+        knnClassifier.addExample(featuresThree.tolist(),3);
 
         //train4
         CenterData();
@@ -37,12 +60,33 @@ function Train(){
         featuresFive = featuresFive.reshape(1,120);
         knnClassifier.addExample(featuresFive.tolist(),5);
 
-
-        //train2
+        //train 6
         CenterData();
-        var featuresTwo = train2.pick(null,null,null,i);
-        featuresTwo = featuresTwo.reshape(1,120);
-        knnClassifier.addExample(featuresTwo.tolist(),2);
+        var featuresSix = train6.pick(null,null,null,i);
+        featuresSix = featuresSix.reshape(1,120);
+        knnClassifier.addExample(featuresSix.tolist(),6);
+
+        //train 7
+        CenterData();
+        var featuresSeven = train7.pick(null,null,null,i);
+        featuresSeven = featuresSeven.reshape(1,120);
+        knnClassifier.addExample(featuresSeven.tolist(),7);
+
+        //train8
+        CenterData();
+        var featuresEight = train8.pick(null,null,null,i);
+        featuresEight = featuresEight.reshape(1,120);
+        knnClassifier.addExample(featuresEight.tolist(),8);
+
+        //train9
+        CenterData();
+        var featuresNine = train9.pick(null,null,null,i);
+        featuresNine = featuresNine.reshape(1,120);
+        knnClassifier.addExample(featuresNine.tolist(),9);
+
+
+
+
 
     }
     trainingCompleted = true;
