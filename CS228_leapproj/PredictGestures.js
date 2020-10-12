@@ -6,7 +6,7 @@ var currentNumHands = 0;
 var oneFrameOfData = nj.zeros([5,4,6]);
 var numPredictions = 0;
 var meanPredictionAccuracy=1;
-var hardDigit = 4;
+
 
 
 Leap.loop(controllerOptions,function (frame) {
@@ -27,15 +27,22 @@ function Train(){
 
         //train4
         CenterData();
-        var features = train4.pick(null,null,null,i);
-        features = features.reshape(1,120);
-        knnClassifier.addExample(features.tolist(),4);
+        var featuresFour = train4.pick(null,null,null,i);
+        featuresFour = featuresFour.reshape(1,120);
+        knnClassifier.addExample(featuresFour.tolist(),4);
 
         //train 5
         CenterData();
-        var featuresOne = train5.pick(null,null,null,i);
-        featuresOne = featuresOne.reshape(1,120);
-        knnClassifier.addExample(featuresOne.tolist(),5);
+        var featuresFive = train5.pick(null,null,null,i);
+        featuresFive = featuresFive.reshape(1,120);
+        knnClassifier.addExample(featuresFive.tolist(),5);
+
+
+        //train2
+        CenterData();
+        var featuresTwo = train2.pick(null,null,null,i);
+        featuresTwo = featuresTwo.reshape(1,120);
+        knnClassifier.addExample(featuresTwo.tolist(),2);
 
     }
     trainingCompleted = true;
@@ -49,6 +56,7 @@ function Test() {
 
 
 function GotResults(err, result){
+    var hardDigit = 5;
     //console.log(result.label);
     var currentPrediction = result.label;
     numPredictions++;
