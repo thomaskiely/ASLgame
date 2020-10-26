@@ -326,11 +326,15 @@ function DetermineState(frame){
 function HandleState0(frame){
     TrainKNNIfNotDoneYet();
     DrawImageToHelpUserPutTheirHandOverTheDevice();
+
 }
 
 function HandleState1(frame){
-    
+
     HandleFrame(frame);
+    if(HandIsTooFarToTheLeft()){
+        DrawArrowRight();
+    }
     Test();
 }
 
@@ -343,9 +347,35 @@ function TrainKNNIfNotDoneYet(){
 
 function DrawImageToHelpUserPutTheirHandOverTheDevice(){
 
+    image(img,0,0,window.innerWidth/2,window.innerHeight/2);
+    //image(imgCenter,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
+
+
+
 }
 
 
+function HandIsUncentered(){
+    return HandIsTooFarToTheLeft();
+}
+
+function HandIsTooFarToTheLeft(){
+    var xValues = oneFrameOfData.slice([],[],[0,6,3]);
+    console.log(xValues.shape);
+    var currentXMean = xValues.mean();
+
+    if(currentXMean < 0.25){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
+function DrawArrowRight(){
+    image(imgRight,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
+}
 
 
 
