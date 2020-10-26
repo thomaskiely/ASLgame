@@ -78,10 +78,7 @@ function Train(){
         featuresSix = featuresSix.reshape(1,120);
         knnClassifier.addExample(featuresSix.tolist(),6);
 
-        //train 6 again
-        /*var featuresSix_2 = train6Koretsky.pick(null,null,null,i);
-        featuresSix_2 = featuresSix_2.reshape(1,120);
-        knnClassifier.addExample(featuresSix_2.tolist(),6);*/
+
 
         //train 7
 
@@ -89,6 +86,7 @@ function Train(){
         featuresSeven = featuresSeven.reshape(1,120);
         knnClassifier.addExample(featuresSeven.tolist(),7);
 
+        //train 7 again
         var featuresSeven_2 = train7Fisher.pick(null,null,null,i);
         featuresSeven_2 = featuresSeven_2.reshape(1,120);
         knnClassifier.addExample(featuresSeven_2.tolist(),7);
@@ -101,13 +99,20 @@ function Train(){
         featuresEight = featuresEight.reshape(1,120);
         knnClassifier.addExample(featuresEight.tolist(),8);
 
+        var featuresEight_Two = train8Clark.pick(null,null,null,i);
+        featuresEight_Two = featuresEight_Two.reshape(1,120);
+        knnClassifier.addExample(featuresEight_Two.tolist(),8);
+
         //train9
 
         var featuresNine = train9.pick(null,null,null,i);
         featuresNine = featuresNine.reshape(1,120);
         knnClassifier.addExample(featuresNine.tolist(),9);
 
-
+        //train 9 again
+        var featuresNine_2 = train9Goldman.pick(null,null,null,i);
+        featuresNine_2 = featuresNine_2.reshape(1,120);
+        knnClassifier.addExample(featuresNine_2.tolist(),9);
 
 
 
@@ -127,7 +132,7 @@ function GotResults(err, result){
     var currentPrediction = result.label;
     numPredictions++;
     meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
-    
+
     console.log(currentPrediction);
 }
 
