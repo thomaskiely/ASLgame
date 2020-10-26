@@ -20,6 +20,9 @@ Leap.loop(controllerOptions,function (frame) {
     else if(programState==1){
         HandleState1(frame);
     }
+    else if(programState==2){
+        HandleState2(frame);
+    }
     //HandleFrame(frame);
 
 
@@ -315,12 +318,24 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
 
 
 function DetermineState(frame){
-    if(frame.hands.length==0){
+    //no hand is present
+    if(currentNumHands==0){
         programState=0;
+        console.log(programState);
     }
-    else if(frame.hands.length=1){
+
+    //hand present but not centered
+    else if(currentNumHands == 1 && HandIsUncentered()==true){
+
         programState=1;
+        console.log(programState);
     }
+    //present and centered
+    else {
+        programState=2;
+        console.log(programState);
+    }
+
 }
 
 function HandleState0(frame){
@@ -333,9 +348,36 @@ function HandleState1(frame){
 
     HandleFrame(frame);
     if(HandIsTooFarToTheLeft()){
+
         DrawArrowRight();
     }
-    Test();
+    if(HandIsTooFarToTheRight()){
+
+        DrawArrowLeft();
+    }
+
+    if(HandIsTooFarUp()){
+        DrawArrowDown();
+    }
+
+    if(HandIsTooFarDown()){
+        DrawArrowUp();
+    }
+
+    if(HandIsTooFarForward()){
+        DrawArrowToward();
+    }
+
+    if(HandIsTooFarBack()){
+        DrawArrowAway();
+    }
+
+    //Test();
+}
+
+function HandleState2(frame){
+    HandleFrame(frame);
+    //Test();
 }
 
 function TrainKNNIfNotDoneYet(){
@@ -345,38 +387,102 @@ function TrainKNNIfNotDoneYet(){
     }*/
 }
 
-function DrawImageToHelpUserPutTheirHandOverTheDevice(){
 
-    image(img,0,0,window.innerWidth/2,window.innerHeight/2);
-    //image(imgCenter,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
-
-
-
-}
-
-
+//determine if hand is less than 0.25 or greater than 0.75
 function HandIsUncentered(){
-    return HandIsTooFarToTheLeft();
+    if(HandIsTooFarToTheLeft() || HandIsTooFarToTheRight() || HandIsTooFarUp() || HandIsTooFarDown() || HandIsTooFarForward() || HandIsTooFarBack()){
+        return true;
+    }
+
 }
 
 function HandIsTooFarToTheLeft(){
     var xValues = oneFrameOfData.slice([],[],[0,6,3]);
-    console.log(xValues.shape);
+
     var currentXMean = xValues.mean();
 
     if(currentXMean < 0.25){
         return true;
     }
-    else{
-        return false;
+
+}
+
+function HandIsTooFarToTheRight(){
+    var xValues = oneFrameOfData.slice([],[],[0,6,3]);
+    var currentXMean = xValues.mean();
+
+    if(currentXMean > 0.75){
+        return true;
+    }
+
+}
+
+function HandIsTooFarUp() {
+    var yValues = oneFrameOfData.slice([],[],[1,6,3]);
+    var currentYMean = yValues.mean();
+
+    if(currentYMean>0.75){
+        return true;
+    }
+    
+}
+
+function HandIsTooFarDown(){
+    var yValues = oneFrameOfData.slice([],[],[1,6,3]);
+    var currentYMean = yValues.mean();
+
+    if(currentYMean<0.25){
+        return true;
     }
 }
 
+function HandIsTooFarForward(){
+    var zValues = oneFrameOfData.slice([],[],[2,6,3]);
+    var currentZMean = zValues.mean();
+
+    if(currentZMean<0.25){
+        return true;
+    }
+}
+
+function HandIsTooFarBack(){
+    var zValues = oneFrameOfData.slice([],[],[2,6,3]);
+    var currentZMean = zValues.mean();
+
+    if (currentZMean>0.75){
+        return true;
+    }
+}
+
+
+//draws first image
+function DrawImageToHelpUserPutTheirHandOverTheDevice(){
+    image(img,0,0,window.innerWidth/2,window.innerHeight/2);
+}
 
 function DrawArrowRight(){
     image(imgRight,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
 }
 
+function DrawArrowLeft(){
+    image(imgLeft,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
+}
+
+function DrawArrowDown(){
+    image(imgDown,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
+}
+
+function DrawArrowUp(){
+    image(imgUp,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
+}
+
+function DrawArrowToward(){
+    image(imgToward,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
+}
+
+function DrawArrowAway(){
+    image(imgAway,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
+}
 
 
 
