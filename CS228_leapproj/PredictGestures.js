@@ -321,19 +321,19 @@ function DetermineState(frame){
     //no hand is present
     if(currentNumHands==0){
         programState=0;
-        console.log(programState);
+
     }
 
     //hand present but not centered
     else if(currentNumHands == 1 && HandIsUncentered()==true){
 
         programState=1;
-        console.log(programState);
+
     }
     //present and centered
     else {
         programState=2;
-        console.log(programState);
+
     }
 
 }
@@ -484,6 +484,11 @@ function DrawArrowAway(){
     image(imgAway,window.innerWidth-975,0,window.innerWidth/2,window.innerHeight/2);
 }
 
+
+function SignIn(){
+    username = document.getElementById('username').value;
+    console.log(username);
+}
 
 
 
