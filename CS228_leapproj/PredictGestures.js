@@ -492,13 +492,17 @@ function SignIn(){
     var list = document.getElementById('users');
 
     if(IsNewUser(username,list)==true){
-        var item = document.createElement('li');
-        item.innerHTML = String(username);
-        list.appendChild(item);
+        CreateNewUser(username,list);
+        CreateSignInItem(username,list);
+    }
+    else{
+        ID = String(username) + "_signins";
+        listItem = document.getElementById( ID );
+        listItem.innerHTML = parseInt(listItem.innerHTML) + 1
     }
 
-    //console.log(list.innerHTML);
-    console.log(list);
+    console.log(list.innerHTML);
+    //console.log(list);
     return false;
 }
 
@@ -519,6 +523,24 @@ function IsNewUser(username,list){
 
 }
 
+function CreateNewUser(username,list){
+    var item = document.createElement('li');
+
+    item.innerHTML = String(username);
+    item.id = String(username)+"_name";
+
+    list.appendChild(item);
+
+}
+
+function CreateSignInItem(username,list){
+    var signTrack = document.createElement('li');
+
+    signTrack.innerHTML = 1;
+    signTrack.id = String(username)+"_signins";
+
+    list.appendChild(signTrack);
+}
 
 
 
