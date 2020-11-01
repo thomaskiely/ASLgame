@@ -486,10 +486,38 @@ function DrawArrowAway(){
 
 
 function SignIn(){
+
     username = document.getElementById('username').value;
-    console.log(username);
+
+    var list = document.getElementById('users');
+
+    if(IsNewUser(username,list)==true){
+        var item = document.createElement('li');
+        item.innerHTML = String(username);
+        list.appendChild(item);
+    }
+
+    //console.log(list.innerHTML);
+    console.log(list);
+    return false;
 }
 
+
+function IsNewUser(username,list){
+    var users = list.children;
+    var usernameFound = false;
+
+    for(var i=0;i<users.length;++i){
+        if(username == users[i].innerHTML){
+            usernameFound=true;
+        }
+        //console.log("users[i]",users[i]);
+        //console.log("html",users[i].innerHTML);
+    }
+
+    return usernameFound==false;
+
+}
 
 
 
