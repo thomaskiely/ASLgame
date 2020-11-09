@@ -30,7 +30,7 @@ Leap.loop(controllerOptions,function (frame) {
 });
 
 function Train(){
-    /*for(var i =0; i<train4.shape[3];++i){
+    for(var i =0; i<train4.shape[3];++i){
         //train0
 
         var featuresZero = train0.pick(null,null,null,i);
@@ -119,29 +119,30 @@ function Train(){
         //train 9 again
         var featuresNine_2 = train9Goldman.pick(null,null,null,i);
         featuresNine_2 = featuresNine_2.reshape(1,120);
-        knnClassifier.addExample(featuresNine_2.tolist(),9);*/
+        knnClassifier.addExample(featuresNine_2.tolist(),9);
 
 
 
-    //}
-    //trainingCompleted = true;
+    }
+    trainingCompleted = true;
 }
 
 function Test() {
-    /*CenterData();
+    CenterData();
     var currentFeatures = oneFrameOfData.reshape(1,120);
-    knnClassifier.classify(currentFeatures.tolist(),GotResults);*/
+    knnClassifier.classify(currentFeatures.tolist(),GotResults);
 }
 
 
 function GotResults(err, result){
-    var hardDigit = 4;
+    var hardDigit = digitToShow;
     var currentPrediction = result.label;
     numPredictions++;
     meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
 
-    //console.log(currentPrediction);
-    console.log("hello");
+    //console.log(currentPrediction, (meanPredictionAccuracy+digitToShow));
+    //console.log(currentPrediction, (meanPredictionAccuracy));
+
 }
 
 
@@ -152,7 +153,7 @@ function CenterData(){
 }
 
 
-function Mirror(){
+/*function Mirror(){
     var xValues = oneFrameOfData.slice([],[],[0,6,3]);
 
     var currentXMean = xValues.mean();
@@ -173,7 +174,7 @@ function Mirror(){
     currentXMean = xValues.mean();
     //console.log(currentXMean);
 
-}
+}*/
 function CenterXData(){
     var xValues = oneFrameOfData.slice([],[],[0,6,3]);
     //console.log(xValues.shape);
@@ -243,7 +244,7 @@ function CenterZData(){
 function HandleFrame(frame) {
     var iBox = frame.interactionBox;
     if(frame.hands.length == 1 || frame.hands.length == 2){
-        //Test();
+
         var hand = frame.hands[0];
         HandleHand(hand,iBox);
     }
@@ -372,7 +373,7 @@ function HandleState1(frame){
         DrawArrowAway();
     }
 
-    //Test();
+
 }
 
 function HandleState2(frame){
@@ -380,14 +381,14 @@ function HandleState2(frame){
     DrawLowerRightPanel();
     DetermineWhetherToSwitchDigits();
 
-    //Test();
+    Test();
 }
 
 function TrainKNNIfNotDoneYet(){
-   /* if (trainingCompleted == false){
+    if (trainingCompleted == false){
         Train();
 
-    }*/
+    }
 }
 
 
@@ -567,7 +568,7 @@ function TimeToSwitchDigits() {
     var timeInMilliseconds = currentTime - timeSinceLastDigitChange;
     var timeInSeconds = timeInMilliseconds/1000;
 
-    if(timeInSeconds>1){
+    if(timeInSeconds>10){
         return true;
     }
 
@@ -578,10 +579,13 @@ function TimeToSwitchDigits() {
 function SwitchDigits(){
     if(digitToShow==1){
         digitToShow=2;
+
     }
     else{
         digitToShow=1;
+
     }
+    numPredictions = 0;
 }
 
 
