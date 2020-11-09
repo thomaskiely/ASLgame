@@ -6,6 +6,8 @@ var imgUp;
 var imgDown;
 var imgToward;
 var imgAway;
+var imgOne;
+var imgTwo;
 function setup(){
 
     createCanvas(window.innerWidth, window.innerHeight);
@@ -17,6 +19,8 @@ function setup(){
     imgDown = loadImage('https://i.imgur.com/gBuKd5m.jpg');
     imgToward = loadImage('https://i.imgur.com/Cmh0BJu.jpg');
     imgAway = loadImage('https://i.imgur.com/ch6ynHb.jpg');
+    imgOne = loadImage('https://i.imgur.com/yWModxo.png');
+    imgTwo = loadImage('https://i.imgur.com/d24pRmG.jpeg');
 
 
 

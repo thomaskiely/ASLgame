@@ -1,24 +1,26 @@
 
-var oneFrameOfData=nj.array([[[ 776.37237, 531.34297,    72.584, 776.37237, 531.34297,    72.584],
-    [ 776.37237, 531.34297,    72.584,  598.8915, 311.41516,   57.2641],
-    [  598.8915, 311.41516,   57.2641, 501.78822, 259.93308,   35.5633],
-    [ 501.78822, 259.93308,   35.5633, 424.28485,  186.3539,   24.5291]],
-    [[ 801.18989, 239.89152,    63.011, 602.38852,  90.98904,    14.183],
-        [ 602.38852,  90.98904,    14.183,  508.0575, 109.41109,  -18.7667],
-        [  508.0575, 109.41109,  -18.7667, 454.39451, 171.79378,  -36.7852],
-        [ 454.39451, 171.79378,  -36.7852, 416.73193, 243.23956,  -49.0444]],
-    [[  835.5804,  231.0153,   54.9479, 676.08915, 105.31557,   3.01422],
-        [ 676.08915, 105.31557,   3.01422, 590.92343, 111.10847,  -36.7034],
-        [ 590.92343, 111.10847,  -36.7034, 536.94517, 169.75381,  -59.3811],
-        [ 536.94517, 169.75381,  -59.3811, 499.85276, 236.45003,  -73.7673]],
-    [[ 872.01535, 265.99072,   47.7343, 760.46524, 173.77146,  -3.44309],
-        [ 760.46524, 173.77146,  -3.44309, 695.53404, 121.40177,  -41.5375],
-        [ 695.53404, 121.40177,  -41.5375, 650.30768, 135.88402,    -64.75],
-        [ 650.30768, 135.88402,    -64.75, 617.46789, 171.03074,  -80.0001]],
-    [[ 907.62002,  400.7691,   42.3545, 835.55477, 302.60123,  -7.89169],
-        [ 835.55477, 302.60123,  -7.89169,  831.7477, 300.60797,  -40.3757],
-        [  831.7477, 300.60797,  -40.3757, 824.56562, 328.46684,  -58.1848],
-        [ 824.56562, 328.46684,  -58.1848, 814.65298, 373.57984,  -73.5905]]]);
+var oneFrameOfData=nj.array([[[ 758.77505, 386.57561,   71.7323, 758.77505, 386.57561,   71.7323],
+    [ 758.77505, 386.57561,   71.7323, 609.86178, 290.28159,   62.0188],
+    [ 609.86178, 290.28159,   62.0188, 529.77836, 270.68006,   38.5546],
+    [ 529.77836, 270.68006,   38.5546, 462.89209,  238.1447,   28.1179]],
+    [[ 804.96093, 322.71755,   62.6155,  636.5892, 194.26589,   21.0029],
+        [  636.5892, 194.26589,   21.0029, 568.55342, 116.19772,  -8.83806],
+        [ 568.55342, 116.19772,  -8.83806,  514.3248,  99.24419,   -25.843],
+        [  514.3248,  99.24419,   -25.843, 470.24312, 104.31752,  -36.8413]],
+    [[  831.0291, 329.32959,   53.5342, 691.50683, 219.04016,   7.48264],
+        [ 691.50683, 219.04016,   7.48264, 634.12464,  130.9605,  -28.3094],
+        [ 634.12464,  130.9605,  -28.3094, 576.93247, 105.96755,  -49.2425],
+        [ 576.93247, 105.96755,  -49.2425, 529.45562, 106.26972,  -61.6771]],
+    [[ 854.68041, 347.36459,   45.0525, 751.62339, 262.49751,  -1.91428],
+        [ 751.62339, 262.49751,  -1.91428, 700.79734, 185.74539,  -36.0594],
+        [ 700.79734, 185.74539,  -36.0594, 647.15637, 160.62919,  -56.7544],
+        [ 647.15637, 160.62919,  -56.7544, 601.07842, 157.84203,  -69.3731]],
+    [[ 868.26778, 389.36674,   38.0113, 798.76296, 317.69988,   -9.2648],
+        [ 798.76296, 317.69988,   -9.2648, 778.24055, 277.74138,  -39.9382],
+        [ 778.24055, 277.74138,  -39.9382, 749.88142, 267.98435,  -56.3266],
+        [ 749.88142, 267.98435,  -56.3266, 714.03163, 269.07774,  -69.3647]]]);
+
+
 
 var anotherFrameOfData=nj.array([[[ 724.03938, 586.40835,   49.7576, 724.03938, 586.40835,   49.7576],
     [ 724.03938, 586.40835,   49.7576, 559.38285, 451.17425,   24.1363],
@@ -41,19 +43,31 @@ var anotherFrameOfData=nj.array([[[ 724.03938, 586.40835,   49.7576, 724.03938, 
         [ 806.09959,  422.2467,  -69.8996, 790.29157, 446.44728,  -88.9519],
         [ 790.29157, 446.44728,  -88.9519,  774.9227, 476.58172,  -105.577]]]);
 
+var frameIndex = 0;
+var flipFrame = 0;
+
 
 function draw(){
 
     clear();
+    //var interactionBox = frame.interactionBox;
+    var interactionBox = oneFrameOfData.interactionBox;
     //console.log(oneFrameOfData.toString());
     for(var i =0; i<oneFrameOfData.shape[0];i++){
         for(var j=0;j<oneFrameOfData.shape[1];j++){
+
+
+
             //get coordinates of one hand
             var xStart = oneFrameOfData.get(i,j,0);
+            xStart = xStart*window.innerWidth;
             var yStart = oneFrameOfData.get(i,j,1);
+            yStart= window.innerHeight*(1-yStart);
             var zStart = oneFrameOfData.get(i,j,2);
             var xStart2 = oneFrameOfData.get(i,j,3);
+            xStart2 = xStart2*window.innerWidth;
             var yStart2 = oneFrameOfData.get(i,j,4);
+            yStart2 = window.innerHeight*(1-yStart2);
             var zStart2 = oneFrameOfData.get(i,j,5);
 
             //get coordiantes of the other
@@ -64,12 +78,66 @@ function draw(){
             var yStart4 = anotherFrameOfData.get(i,j,4);
             var zStart4 = anotherFrameOfData.get(i,j,5);
 
-            line(xStart,yStart,xStart2,yStart2);
-            line(xStart3,yStart3,xStart4,yStart4);
+
+            var oneFrameFirst = [xStart,yStart,zStart];
+            var oneFrameSecond = [xStart2,yStart2,zStart2];
+            var anotherFrameFirst = [xStart3,yStart3,zStart3];
+            var anotherFrameSecond = [xStart4,yStart4,zStart4];
+
+
+            //scale the raw coordinates
+            //OneFrameOfData
+            var canvasXOneFrameFirst = window.innerWidth * oneFrameFirst[0];
+            var canvasYOneFrameFirst = window.innerHeight *(1-oneFrameFirst[1]);
+            var canvasXOneFrameSecond = window.innerWidth*oneFrameSecond[0];
+            var canvasYOneFrameSecond = window.innerHeight*(1-oneFrameSecond[1]);
+
+            //AnotherFrameOfData
+            var canvasXAnotherFrameFirst = window.innerWidth * anotherFrameFirst[0];
+            var canvasYAnotherFrameFirst = window.innerHeight*(1-anotherFrameFirst[1]);
+            var canvasXAnotherFrameSecond = window.innerWidth* anotherFrameSecond[0];
+            var canvasYAnotherFrameSecond = window.innerHeight*(1-anotherFrameSecond[1]);
+
+
+            //normalize the coordinates
+            //OneFrameOfData
+           /* var normalizedOneFrameFirst = interactionBox.normalizePoint(oneFrameFirst,true);
+            var normalizedOneFrameSecond = interactionBox.normalizePoint(oneFrameSecond,true);
+            //AnotherFrameOfData
+            var normalizedAnotherFrameFirst = interactionBox.normalizePoint(anotherFrameFirst,true);
+            var normalizedAnotherFrameSecond = interactionBox.normalizePoint(anotherFrameSecond,true);
+
+            console.log(normalizedAnotherFrameFirst.toString());*/
+
+            if(flipFrame%2==0){
+                //even so another frame of data
+                line(xStart3,yStart3,xStart4,yStart4);
+                //line(canvasXAnotherFrameFirst,canvasYAnotherFrameFirst,canvasXAnotherFrameSecond,canvasYAnotherFrameSecond);
+            }
+            else if(flipFrame%2!=0){
+                //odd so one frame of data
+                line(xStart,yStart,xStart2,yStart2);
+                //line(canvasXOneFrameFirst,canvasYOneFrameFirst,canvasXOneFrameSecond,canvasYOneFrameSecond);
+            }
+
 
         }
     }
 
+    if(frameIndex<=99){
+        flipFrame = 1;
+    }
+    else if(frameIndex>=100){
+        flipFrame = 0;
+    }
+
+    frameIndex++;
+
+    if(frameIndex==200){
+        frameIndex=0;
+    }
+    console.log(flipFrame);
+
+
 
 }
-

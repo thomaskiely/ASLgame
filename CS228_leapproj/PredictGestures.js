@@ -7,8 +7,8 @@ var oneFrameOfData = nj.zeros([5,4,6]);
 var numPredictions = 0;
 var meanPredictionAccuracy=1;
 var programState = 0;
-
-
+var digitToShow = 1;
+var timeSinceLastDigitChange = new Date();
 Leap.loop(controllerOptions,function (frame) {
 
     currentNumHands = frame.hands.length;
@@ -377,6 +377,9 @@ function HandleState1(frame){
 
 function HandleState2(frame){
     HandleFrame(frame);
+    DrawLowerRightPanel();
+    DetermineWhetherToSwitchDigits();
+
     //Test();
 }
 
@@ -540,6 +543,45 @@ function CreateSignInItem(username,list){
     signTrack.id = String(username)+"_signins";
 
     list.appendChild(signTrack);
+}
+
+function DrawLowerRightPanel() {
+    if(digitToShow==1) {
+        image(imgOne,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+    }
+    else if(digitToShow==2){
+        image(imgTwo,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+    }
+
+}
+
+function DetermineWhetherToSwitchDigits(){
+    if(TimeToSwitchDigits()){
+        SwitchDigits();
+        timeSinceLastDigitChange = new Date();
+    }
+}
+
+function TimeToSwitchDigits() {
+    var currentTime = new Date();
+    var timeInMilliseconds = currentTime - timeSinceLastDigitChange;
+    var timeInSeconds = timeInMilliseconds/1000;
+
+    if(timeInSeconds>1){
+        return true;
+    }
+
+
+
+}
+
+function SwitchDigits(){
+    if(digitToShow==1){
+        digitToShow=2;
+    }
+    else{
+        digitToShow=1;
+    }
 }
 
 
