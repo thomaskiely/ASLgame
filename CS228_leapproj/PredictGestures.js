@@ -141,7 +141,7 @@ function GotResults(err, result){
     meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
 
     //console.log(currentPrediction, (meanPredictionAccuracy+digitToShow));
-    //console.log(currentPrediction, (meanPredictionAccuracy));
+    console.log(currentPrediction, (meanPredictionAccuracy));
 
 }
 
@@ -306,8 +306,22 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
     //draw lines
     strokeWeight(startWeight*5);
     if(currentNumHands==1){
+       
+        if(meanPredictionAccuracy<0.5){
 
-        stroke(color);
+            stroke(int(255*(1-meanPredictionAccuracy)),0,0);
+
+        }
+
+        else if(meanPredictionAccuracy>0.5){
+            //var n = meanPredictionAccuracy *255;
+            //int(n);
+            stroke(0,int(255*meanPredictionAccuracy),0);
+        }
+
+
+
+        //stroke(color);
 
     }
     else if(currentNumHands==2){
@@ -568,7 +582,7 @@ function TimeToSwitchDigits() {
     var timeInMilliseconds = currentTime - timeSinceLastDigitChange;
     var timeInSeconds = timeInMilliseconds/1000;
 
-    if(timeInSeconds>10){
+    if(timeInSeconds>20){
         return true;
     }
 
