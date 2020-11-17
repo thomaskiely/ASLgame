@@ -7,8 +7,12 @@ var oneFrameOfData = nj.zeros([5,4,6]);
 var numPredictions = 0;
 var meanPredictionAccuracy=1;
 var programState = 0;
-var digitToShow = 1;
+var digitToShow = 9;
 var timeSinceLastDigitChange = new Date();
+var accuracyArray = [10];
+var scaffoldingState = 2;
+
+
 Leap.loop(controllerOptions,function (frame) {
 
     currentNumHands = frame.hands.length;
@@ -306,7 +310,7 @@ function handleBone(bone, color, startWeight,fingerIndex,boneIndex, interactionB
     //draw lines
     strokeWeight(startWeight*5);
     if(currentNumHands==1){
-       
+
         if(meanPredictionAccuracy<0.5){
 
             stroke(int(255*(1-meanPredictionAccuracy)),0,0);
@@ -561,12 +565,74 @@ function CreateSignInItem(username,list){
 }
 
 function DrawLowerRightPanel() {
-    if(digitToShow==1) {
-        image(imgOne,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+
+    if(scaffoldingState==0){
+        if(digitToShow==1) {
+            image(imgOne,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==2){
+            image(imgTwo,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==3){
+            image(imgThree,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==4){
+            image(imgFour,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==5){
+            image(imgFive,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==6){
+            image(imgSix,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==7){
+            image(imgSeven,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==8){
+            image(imgEight,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==9){
+            image(imgNine,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==0){
+            image(imgZero,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
     }
-    else if(digitToShow==2){
-        image(imgTwo,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+    else if(scaffoldingState>0){
+        if(digitToShow==1) {
+            image(numOne,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==2){
+            image(numTwo,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==3){
+            image(numThree,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==4){
+            image(numFour,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==5){
+            image(numFive,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==6){
+            image(numSix,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==7){
+            image(imgSeven,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==8){
+            image(imgEight,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==9){
+            image(imgNine,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==0){
+            image(numZero,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
     }
+
+
+
 
 }
 
@@ -580,26 +646,98 @@ function DetermineWhetherToSwitchDigits(){
 function TimeToSwitchDigits() {
     var currentTime = new Date();
     var timeInMilliseconds = currentTime - timeSinceLastDigitChange;
-    var timeInSeconds = timeInMilliseconds/1000;
+    var timeSeconds = timeInMilliseconds / 1000;
+    var chosenTime = 10;
 
-    if(timeInSeconds>20){
+    if(scaffoldingState==2 && accuracyArray[digitToShow] > 0.75){
+        chosenTime = 5;
+    }
+    if(timeSeconds>chosenTime){
         return true;
     }
-
-
-
 }
 
 function SwitchDigits(){
-    if(digitToShow==1){
-        digitToShow=2;
+    accuracyArray[digitToShow] = meanPredictionAccuracy;
+    if(scaffoldingState==0){
+        if(digitToShow==0){
+            digitToShow=1;
 
-    }
-    else{
-        digitToShow=1;
+        }
+        else if(digitToShow==1  && accuracyArray[0] > 0.5 && accuracyArray[1] > 0.5){
+            digitToShow=2;
+        }
+        else if(digitToShow==2 &&  accuracyArray[2]>0.5){
+            digitToShow=3;
+        }
+        else if(digitToShow==3 && accuracyArray[3]>0.5){
+            digitToShow=4;
+        }
+        else if(digitToShow==4 && accuracyArray[4]>0.5){
+            digitToShow=5;
+        }
+        else if(digitToShow==5 && accuracyArray[5]>0.5){
+            digitToShow=6;
+        }
+        else if(digitToShow==6 && accuracyArray[6]>0.5){
+            digitToShow=7;
+        }
+        else if(digitToShow==7 && accuracyArray[7]>0.5){
+            digitToShow=8;
+        }
+        else if (digitToShow==8 && accuracyArray[8]>0.5){
+            digitToShow=9;
+            scaffoldingState = 1;
+        }
+        else{
+            digitToShow=0;
+        }
 
+
+        numPredictions = 0;
     }
-    numPredictions = 0;
+
+
+    else if(scaffoldingState >= 1){
+        if(digitToShow==0){
+            digitToShow=1;
+
+        }
+        else if(digitToShow==1  && accuracyArray[0] > 0.5 && accuracyArray[1] > 0.5){
+            digitToShow=2;
+        }
+        else if(digitToShow==2 &&  accuracyArray[2]>0.5){
+            digitToShow=3;
+        }
+        else if(digitToShow==3 && accuracyArray[3]>0.5){
+            digitToShow=4;
+        }
+        else if(digitToShow==4 && accuracyArray[4]>0.5){
+            digitToShow=5;
+        }
+        else if(digitToShow==5 && accuracyArray[5]>0.5){
+            digitToShow=6;
+        }
+        else if(digitToShow==6 && accuracyArray[6]>0.5){
+            digitToShow=7;
+        }
+        else if(digitToShow==7 && accuracyArray[7]>0.5){
+            digitToShow=8;
+        }
+        else if (digitToShow==8 && accuracyArray[8]>0.5){
+            digitToShow=9;
+            scaffoldingState = 2;
+        }
+        else{
+            digitToShow=0;
+        }
+
+
+        numPredictions = 0;
+    }
+
+
+
 }
 
 
