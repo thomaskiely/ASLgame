@@ -26,6 +26,14 @@ var numSix;
 var numSeven;
 var numEight;
 var numNine;
+var imgSeventySeven;
+var imgFiveFourtyThree;
+var imgTwentyEight;
+var imgFifty;
+var imgTwotimesTwo;
+var imgTenMinusFive;
+var imgThirtyFiveDivideSeven;
+var imgRootThirtySix;
 function setup(){
 
     createCanvas(window.innerWidth, window.innerHeight);
@@ -54,6 +62,20 @@ function setup(){
     numFour = loadImage('https://i.imgur.com/rZngs2l.jpg');
     numFive = loadImage('https://i.imgur.com/P1Akhsh.jpg');
     numSix = loadImage('https://i.imgur.com/g5YyrQb.png');
+    numSeven = loadImage('https://i.imgur.com/0HV3bOW.png');
+    numEight = loadImage('https://i.imgur.com/zRGxP2T.jpg');
+    numNine = loadImage('https://i.imgur.com/kmrPzvf.png');
+    imgSeventySeven = loadImage('https://i.imgur.com/sh1yELB.jpg');
+    imgFiveFourtyThree = loadImage('https://i.imgur.com/8CMkATT.jpeg');
+    imgTwentyEight = loadImage('https://i.imgur.com/0EGN9dD.jpeg');
+    imgFifty = loadImage('https://i.imgur.com/pNvpHE6.jpg');
+    imgTwotimesTwo = loadImage('https://i.imgur.com/I7kIU92.jpeg');
+    imgTenMinusFive = loadImage('https://i.imgur.com/jMJcf3U.jpg');
+    imgThirtyFiveDivideSeven = loadImage('https://i.imgur.com/Bvq6XGC.jpg');
+    //imgRootThirtySix = loadImage('https://imgur.com/a/IpgG4F8');
+
+
+
 
 
 

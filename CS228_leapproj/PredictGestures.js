@@ -10,9 +10,9 @@ var programState = 0;
 var digitToShow = 9;
 var timeSinceLastDigitChange = new Date();
 var accuracyArray = [10];
-var scaffoldingState = 2;
-
-
+var scaffoldingState = 3;
+var numCycles = 0;
+var youWin = 0;
 Leap.loop(controllerOptions,function (frame) {
 
     currentNumHands = frame.hands.length;
@@ -145,7 +145,7 @@ function GotResults(err, result){
     meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
 
     //console.log(currentPrediction, (meanPredictionAccuracy+digitToShow));
-    console.log(currentPrediction, (meanPredictionAccuracy));
+    console.log(currentPrediction, (meanPredictionAccuracy), digitToShow);
 
 }
 
@@ -157,28 +157,6 @@ function CenterData(){
 }
 
 
-/*function Mirror(){
-    var xValues = oneFrameOfData.slice([],[],[0,6,3]);
-
-    var currentXMean = xValues.mean();
-
-    var horizontalShift = 1-currentXMean;
-
-    for(var i=0; i<oneFrameOfData.shape[0];++i){
-        for(var j=0; j<oneFrameOfData.shape[1];++j){
-            var currentX = oneFrameOfData.get(i,j,0);
-            var shiftedX = currentX + horizontalShift;
-            oneFrameOfData.set(i,j,0, shiftedX);
-            //3 denotes the next set of joints, before was previous, look at where oneFrameOfData is set
-            currentX = oneFrameOfData.get(i,j,3);
-            shiftedX = currentX + horizontalShift;
-            oneFrameOfData.set(i,j,3, shiftedX);
-        }
-    }
-    currentXMean = xValues.mean();
-    //console.log(currentXMean);
-
-}*/
 function CenterXData(){
     var xValues = oneFrameOfData.slice([],[],[0,6,3]);
     //console.log(xValues.shape);
@@ -598,7 +576,7 @@ function DrawLowerRightPanel() {
             image(imgZero,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
     }
-    else if(scaffoldingState>0){
+    else if(scaffoldingState == 1 || scaffoldingState == 2){
         if(digitToShow==1) {
             image(numOne,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
@@ -618,6 +596,41 @@ function DrawLowerRightPanel() {
             image(numSix,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
         else if(digitToShow==7){
+            image(numSeven,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==8){
+            image(numEight,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==9){
+            image(numNine,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==0){
+            image(numZero,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+
+
+    }
+
+    else if(scaffoldingState == 3){
+        if(digitToShow==1) {
+            image(imgFiveFourtyThree,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==2){
+            image(imgTwentyEight,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==3){
+            image(imgFifty,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==4){
+            image(imgTwotimesTwo,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==5){
+            image(imgThirtyFiveDivideSeven,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==6){
+            image(imgUp,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+        }
+        else if(digitToShow==7){
             image(imgSeven,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
         else if(digitToShow==8){
@@ -627,7 +640,7 @@ function DrawLowerRightPanel() {
             image(imgNine,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
         else if(digitToShow==0){
-            image(numZero,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
+            image(imgSeventySeven,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
     }
 
@@ -652,91 +665,162 @@ function TimeToSwitchDigits() {
     if(scaffoldingState==2 && accuracyArray[digitToShow] > 0.75){
         chosenTime = 5;
     }
-    if(timeSeconds>chosenTime){
+    if(timeSeconds>=chosenTime){
         return true;
     }
+    else if(timeSeconds<chosenTime){
+        return false;
+    }
+
 }
 
 function SwitchDigits(){
     accuracyArray[digitToShow] = meanPredictionAccuracy;
-    if(scaffoldingState==0){
+    if(scaffoldingState<3){
         if(digitToShow==0){
             digitToShow=1;
 
         }
-        else if(digitToShow==1  && accuracyArray[0] > 0.5 && accuracyArray[1] > 0.5){
-            digitToShow=2;
-        }
-        else if(digitToShow==2 &&  accuracyArray[2]>0.5){
-            digitToShow=3;
-        }
-        else if(digitToShow==3 && accuracyArray[3]>0.5){
-            digitToShow=4;
-        }
-        else if(digitToShow==4 && accuracyArray[4]>0.5){
-            digitToShow=5;
-        }
-        else if(digitToShow==5 && accuracyArray[5]>0.5){
-            digitToShow=6;
-        }
-        else if(digitToShow==6 && accuracyArray[6]>0.5){
-            digitToShow=7;
-        }
-        else if(digitToShow==7 && accuracyArray[7]>0.5){
-            digitToShow=8;
-        }
-        else if (digitToShow==8 && accuracyArray[8]>0.5){
-            digitToShow=9;
-            scaffoldingState = 1;
-        }
-        else{
-            digitToShow=0;
-        }
+        else if(digitToShow==1){
+            if(accuracyArray[0] > 0.5 && accuracyArray[1] > 0.5){
+                digitToShow=2;
+            }
+            else{
+                digitToShow=0;
+            }
 
+        }
+        else if(digitToShow==2){
+            if(accuracyArray[2]>0.5){
+                digitToShow=3;
+            }
+            else{
+                digitToShow=0;
+            }
+
+        }
+        else if(digitToShow==3){
+            if(accuracyArray[3]>0.5){
+                digitToShow=4
+            }
+            else{
+                digitToShow=2;
+            }
+
+        }
+        else if(digitToShow==4){
+            if(accuracyArray[4]>0.5){
+                digitToShow = 5;
+            }
+            else{
+                digitToShow = 3;
+            }
+
+        }
+        else if(digitToShow==5){
+            if(accuracyArray[5]>0.5){
+                digitToShow = 6;
+            }
+            else{
+                digitToShow = 4;
+            }
+
+        }
+        else if(digitToShow==6){
+            if(accuracyArray[6]>0.5){
+                digitToShow=7;
+            }
+            else{
+                digitToShow=5;
+            }
+        }
+        else if(digitToShow==7){
+            if(accuracyArray[7]>0.5){
+                digitToShow=8;
+            }
+            else{
+                digitToShow=6;
+            }
+
+        }
+        else if (digitToShow==8){
+            if(accuracyArray[8]>0.5){
+                digitToShow=9;
+                numCycles++;
+            }
+            else{
+                digitToShow=7;
+            }
+
+
+        }
+        else if(digitToShow==9){
+
+            //handles first run
+            if(numCycles==0){
+                digitToShow = 0;
+            }
+
+            else{
+                //all 9 succesful go to next state
+                if(accuracyArray[9]>0.5){
+                    if(scaffoldingState==0){
+                        scaffoldingState=1;
+                    }
+                    else if(scaffoldingState==1){
+                        scaffoldingState=2;
+                    }
+                    else{
+                        scaffoldingState=3;
+                    }
+
+                    digitToShow=0;
+                }
+                else{
+                    numCycles = 0;
+                    digitToShow = 8;
+                }
+            }
+        }
 
         numPredictions = 0;
     }
 
-
-    else if(scaffoldingState >= 1){
-        if(digitToShow==0){
-            digitToShow=1;
-
+    else if(scaffoldingState == 3){
+        if(digitToShow == 0 && accuracyArray[0]> 0.5){
+            digitToShow = 1;
         }
-        else if(digitToShow==1  && accuracyArray[0] > 0.5 && accuracyArray[1] > 0.5){
-            digitToShow=2;
+        else if(digitToShow == 1 && accuracyArray[1]>0.5){
+            digitToShow = 2;
         }
-        else if(digitToShow==2 &&  accuracyArray[2]>0.5){
-            digitToShow=3;
+        else if(digitToShow == 2 && accuracyArray[2]>0.5){
+            digitToShow = 3;
         }
-        else if(digitToShow==3 && accuracyArray[3]>0.5){
-            digitToShow=4;
+        else if(digitToShow == 3 && accuracyArray[3]>0.5){
+            digitToShow = 4;
         }
-        else if(digitToShow==4 && accuracyArray[4]>0.5){
-            digitToShow=5;
+        else if(digitToShow == 4 && accuracyArray[4]>0.5){
+            digitToShow = 5;
         }
-        else if(digitToShow==5 && accuracyArray[5]>0.5){
-            digitToShow=6;
+        else if(digitToShow == 5 && accuracyArray[5]>0.5){
+            digitToShow = 6;
         }
-        else if(digitToShow==6 && accuracyArray[6]>0.5){
-            digitToShow=7;
+        else if(digitToShow == 6 && accuracyArray[6]>0.5){
+            digitToShow = 7;
         }
-        else if(digitToShow==7 && accuracyArray[7]>0.5){
-            digitToShow=8;
+        else if(digitToShow == 7 && accuracyArray[7]>0.5){
+            digitToShow = 8;
         }
-        else if (digitToShow==8 && accuracyArray[8]>0.5){
-            digitToShow=9;
-            scaffoldingState = 2;
+        else if(digitToShow == 8 && accuracyArray[8]>0.5){
+            digitToShow = 9;
         }
-        else{
-            digitToShow=0;
+        else if(digitToShow == 9 && accuracyArray[9] >0.5){
+            //you win
+            console.log("hi");
+            youWin++;
+            digitToShow = 0;
         }
-
-
-        numPredictions = 0;
     }
-
-
 
 }
 
