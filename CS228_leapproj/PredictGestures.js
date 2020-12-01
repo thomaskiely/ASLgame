@@ -10,15 +10,21 @@ var programState = 0;
 var digitToShow = 9;
 var timeSinceLastDigitChange = new Date();
 var accuracyArray = [10];
-var scaffoldingState = 3;
+var scaffoldingState = 0;
 var numCycles = 0;
 var youWin = 0;
+var lastDigitAccuracy = 1;
+var returningUserLastAccuracy;
+var newUser;
+var averageOfAllUsers;
+var averageOfAllUsersToDouble;
 Leap.loop(controllerOptions,function (frame) {
 
     currentNumHands = frame.hands.length;
     clear();
     DetermineState(frame);
     if(programState==0){
+
         HandleState0(frame);
     }
     else if(programState==1){
@@ -26,7 +32,9 @@ Leap.loop(controllerOptions,function (frame) {
     }
     else if(programState==2){
         HandleState2(frame);
+
     }
+
     //HandleFrame(frame);
 
 
@@ -145,7 +153,7 @@ function GotResults(err, result){
     meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
 
     //console.log(currentPrediction, (meanPredictionAccuracy+digitToShow));
-    console.log(currentPrediction, (meanPredictionAccuracy), digitToShow);
+    //console.log(currentPrediction, (meanPredictionAccuracy), digitToShow);
 
 }
 
@@ -336,12 +344,14 @@ function DetermineState(frame){
 }
 
 function HandleState0(frame){
+
     TrainKNNIfNotDoneYet();
     DrawImageToHelpUserPutTheirHandOverTheDevice();
 
 }
 
 function HandleState1(frame){
+
 
     HandleFrame(frame);
     if(HandIsTooFarToTheLeft()){
@@ -373,9 +383,12 @@ function HandleState1(frame){
 }
 
 function HandleState2(frame){
+
     HandleFrame(frame);
+    DrawLowerLeftPanel();
     DrawLowerRightPanel();
     DetermineWhetherToSwitchDigits();
+
 
     Test();
 }
@@ -458,6 +471,7 @@ function HandIsTooFarBack(){
 //draws first image
 function DrawImageToHelpUserPutTheirHandOverTheDevice(){
     image(img,0,0,window.innerWidth/2,window.innerHeight/2);
+
 }
 
 function DrawArrowRight(){
@@ -485,25 +499,136 @@ function DrawArrowAway(){
 }
 
 
-function SignIn(){
+function DrawLowerLeftPanel(){
 
+
+    if(newUser==true){
+        var lastDigitAccuracyToPercent = lastDigitAccuracy*100;
+        var trimLastDigitAccuracy = lastDigitAccuracyToPercent.toFixed(2);
+        var accToString = trimLastDigitAccuracy.toString()+"%";
+        var s = 'Previous Digit Accuracy: ';
+        var completeString = s+accToString;
+
+        fill(50);
+        stroke(0);
+        strokeWeight(0);
+        textSize(30);
+        text(completeString,50,500,1000,180);
+        text(averageUserCompletedString,50,600,1000,180);
+    }
+    else{
+        //current session
+        var lastDigitAccuracyToPercent = lastDigitAccuracy*100;
+        var trimLastDigitAccuracy = lastDigitAccuracyToPercent.toFixed(2);
+        var accToString = trimLastDigitAccuracy.toString()+"%";
+        var s = 'Previous Digit Accuracy: ';
+        var completeString = s+accToString;
+
+        //last session
+        //console.log(returningUserLastAccuracy);
+        var lastSessionAccuracyToPercent = returningUserLastAccuracy*100;
+        var trimLastSessionAccuracy = lastSessionAccuracyToPercent.toFixed(2);
+        var lastSessionAccToString = trimLastSessionAccuracy.toString()+"%";
+        var lastSession = 'Last Sessions Average Accuracy: ';
+        var lastSessionCompletedString = lastSession + lastSessionAccToString;
+
+
+        var avererageOfAllToPercent = (averageOfAllUsersToDouble/2)*100;
+        var trimAverageUserAccuracy = avererageOfAllToPercent.toFixed(2);
+        var averageOfAllToString = trimAverageUserAccuracy.toString()+"%";
+        var averageUser = "Average Accuracy of All users: ";
+        var averageUserCompletedString = averageUser + averageOfAllToString;
+
+        fill(50);
+        stroke(0);
+        strokeWeight(0);
+        textSize(30);
+        text(completeString,50,500,1000,180);
+        text(lastSessionCompletedString,50,600,1000,180);
+        text(averageUserCompletedString,50,700,1000,180);
+
+        console.log(avererageOfAllToPercent);
+    }
+
+
+}
+
+
+
+function SignIn(){
     username = document.getElementById('username').value;
 
     var list = document.getElementById('users');
 
+
     if(IsNewUser(username,list)==true){
-        CreateNewUser(username,list);
-        CreateSignInItem(username,list);
+            CreateNewUser(username,list);
+            CreateSignInItem(username,list);
+            CreateUserAccuracy(username,list);
+            newUser=true;
+
     }
-    else{
+    else {
         ID = String(username) + "_signins";
         listItem = document.getElementById( ID );
-        listItem.innerHTML = parseInt(listItem.innerHTML) + 1
+        listItem.innerHTML = parseInt(listItem.innerHTML) + 1;
+        newUser=false;
+
+        //console.log(returningUserLastAccuracy);
+
     }
 
-    console.log(list.innerHTML);
-    //console.log(list);
+    ID = String(username) + "_accuracy";
+    listItem = document.getElementById( ID );
+    console.log(listItem.innerHTML);
+    returningUserLastAccuracy = listItem.innerHTML;
+    averageOfAllUsers = getAverageAccuracyOfAllUsers(username,list);
+    averageOfAllUsersToDouble = parseFloat(averageOfAllUsers);
+    console.log(averageOfAllUsersToDouble);
+    console.log(averageOfAllUsers);
+    //console.log(list.innerHTML);
+
     return false;
+}
+
+function SignOut() {
+    username = document.getElementById('username').value;
+    var list = document.getElementById('users');
+
+
+
+    if(newUser==true){
+
+        CreateUserAccuracy(username,list);
+
+    }
+    else{
+        ID = String(username) + "_accuracy";
+        listItem = document.getElementById( ID );
+        listItem.innerHTML = lastDigitAccuracy;
+    }
+
+    digitToShow = 9;
+    lastDigitAccuracy = 1;
+    //console.log(list.innerHTML);
+    //console.log(returningUserLastAccuracy);
+    return false;
+
+}
+
+function getAverageAccuracyOfAllUsers(username,list){
+    var totalAccuracy = 0;
+    //var totalAccuracy2 = 0;
+    var ul = document.getElementById("users");
+    var items = ul.getElementsByTagName("li");
+    for(var i = 2;i<items.length;i+=3){
+        totalAccuracy = parseFloat(totalAccuracy.toString()) + parseFloat(items[i].innerHTML.toString());
+    }
+    /*for(var j = 2;i<items.length-2;j+=3){
+        totalAccuracy2 = totalAccuracy2 + items[i].innerHTML;
+    }*/
+
+    return totalAccuracy;
 }
 
 
@@ -534,6 +659,7 @@ function CreateNewUser(username,list){
 }
 
 function CreateSignInItem(username,list){
+
     var signTrack = document.createElement('li');
 
     signTrack.innerHTML = 1;
@@ -541,6 +667,18 @@ function CreateSignInItem(username,list){
 
     list.appendChild(signTrack);
 }
+
+function CreateUserAccuracy(username,list){
+    var accTrack = document.createElement('li');
+
+
+    accTrack.innerHTML = lastDigitAccuracy;
+
+
+    accTrack.id = String(username)+"_accuracy";
+    list.appendChild(accTrack);
+}
+
 
 function DrawLowerRightPanel() {
 
@@ -612,6 +750,9 @@ function DrawLowerRightPanel() {
     }
 
     else if(scaffoldingState == 3){
+        //testing text
+
+
         if(digitToShow==1) {
             image(imgFiveFourtyThree,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
@@ -676,6 +817,7 @@ function TimeToSwitchDigits() {
 
 function SwitchDigits(){
     accuracyArray[digitToShow] = meanPredictionAccuracy;
+    lastDigitAccuracy = meanPredictionAccuracy;
     if(scaffoldingState<3){
         if(digitToShow==0){
             digitToShow=1;
@@ -816,7 +958,7 @@ function SwitchDigits(){
         }
         else if(digitToShow == 9 && accuracyArray[9] >0.5){
             //you win
-            console.log("hi");
+            //console.log("hi");
             youWin++;
             digitToShow = 0;
         }
