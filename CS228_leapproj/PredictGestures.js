@@ -10,7 +10,7 @@ var programState = 0;
 var digitToShow = 9;
 var timeSinceLastDigitChange = new Date();
 var accuracyArray = [10];
-var scaffoldingState = 0;
+var scaffoldingState = 3;
 var numCycles = 0;
 var youWin = 0;
 var lastDigitAccuracy = 1;
@@ -153,7 +153,7 @@ function GotResults(err, result){
     meanPredictionAccuracy = ((numPredictions-1)*meanPredictionAccuracy+(currentPrediction==hardDigit))/(numPredictions);
 
     //console.log(currentPrediction, (meanPredictionAccuracy+digitToShow));
-    //console.log(currentPrediction, (meanPredictionAccuracy), digitToShow);
+    console.log(currentPrediction, (meanPredictionAccuracy), digitToShow);
 
 }
 
@@ -784,6 +784,43 @@ function DrawLowerRightPanel() {
             image(imgSeventySeven,window.innerWidth-675,window.innerHeight-550,window.innerWidth/4,window.innerHeight/2);
         }
     }
+    else if(scaffoldingState==4){
+        fill(50);
+        stroke(0);
+        strokeWeight(0);
+        textSize(100);
+        //text(completeString,50,500,1000,180);
+
+        if(digitToShow==1) {
+            text("I",1200,500,1000,180);
+        }
+        else if(digitToShow==2){
+            text("II",1200,500,1000,180);
+        }
+        else if(digitToShow==3){
+            text("III",1200,500,1000,180);
+        }
+        else if(digitToShow==4){
+            text("IV",1200,500,1000,180);
+        }
+        else if(digitToShow==5){
+            text("V",1200,500,1000,180);
+        }
+        else if(digitToShow==6){
+            text("VI",1200,500,1000,180);
+        }
+        else if(digitToShow==7){
+            text("VII",1200,500,1000,180);
+        }
+        else if(digitToShow==8){
+            text("VIII",1200,500,1000,180);        }
+        else if(digitToShow==9){
+            text("IX",1200,500,1000,180);
+        }
+        else if(digitToShow==0){
+            text("0",1200,500,1000,180);
+        }
+    }
 
 
 
@@ -801,7 +838,7 @@ function TimeToSwitchDigits() {
     var currentTime = new Date();
     var timeInMilliseconds = currentTime - timeSinceLastDigitChange;
     var timeSeconds = timeInMilliseconds / 1000;
-    var chosenTime = 10;
+    var chosenTime = 7;
 
     if(scaffoldingState==2 && accuracyArray[digitToShow] > 0.75){
         chosenTime = 5;
@@ -928,7 +965,82 @@ function SwitchDigits(){
         numPredictions = 0;
     }
 
-    else if(scaffoldingState == 3){
+    else if(scaffoldingState == 3 || scaffoldingState==4){
+
+        /*if(digitToShow==0){
+            digitToShow=1;
+
+        }
+        else if(digitToShow==1){
+            if(accuracyArray[0] > 0.5 && accuracyArray[1] > 0.5){
+                digitToShow=2;
+            }
+            else{
+                digitToShow=0;
+            }
+
+        }
+        else if(digitToShow==2){
+            if(accuracyArray[2]>0.5){
+                digitToShow=3;
+            }
+            else{
+                digitToShow=0;
+            }
+
+        }
+        else if(digitToShow==3){
+            if(accuracyArray[3]>0.5){
+                digitToShow=4
+            }
+            else{
+                digitToShow=2;
+            }
+
+        }
+        else if(digitToShow==4){
+            if(accuracyArray[4]>0.5){
+                digitToShow = 5;
+            }
+            else{
+                digitToShow = 3;
+            }
+
+        }
+        else if(digitToShow==5){
+            if(accuracyArray[5]>0.5){
+                digitToShow = 6;
+            }
+            else{
+                digitToShow = 4;
+            }
+
+        }
+        else if(digitToShow==6){
+            if(accuracyArray[6]>0.5){
+                digitToShow=7;
+            }
+            else{
+                digitToShow=5;
+            }
+        }
+        else if(digitToShow==7){
+            if(accuracyArray[7]>0.5){
+                digitToShow=8;
+            }
+            else{
+                digitToShow=6;
+            }
+
+        }
+        else if (digitToShow==8) {
+            if (accuracyArray[8] > 0.5) {
+                digitToShow = 9;
+                numCycles++;
+            } else {
+                digitToShow = 7;
+            }
+        }*/
         if(digitToShow == 0 && accuracyArray[0]> 0.5){
             digitToShow = 1;
         }
@@ -963,6 +1075,9 @@ function SwitchDigits(){
             digitToShow = 0;
         }
     }
+
+
+
 
 }
 
